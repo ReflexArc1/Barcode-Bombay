@@ -4,202 +4,255 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barcode Bombay | POPROCKS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #070707;
-            --card-bg: #121212;
-            --text: #e0e0e0;
-            --acid: #ccff00; /* Toxic acid yellow/green */
-            --border: #222222;
+            --bg-dark: #070707;
+            --text-main: #EDEDED;
+            --text-dim: #777777;
+            --acid-red: #FF1A1A; /* From your ticket */
+            --acid-yellow: #FFDE00; /* From your ticket */
+            --grid-line: rgba(255, 255, 255, 0.06);
+            --border-color: #222222;
         }
 
-        * { box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg);
-            /* Microscopic grunge grid texture */
-            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 30px 30px;
-            background-position: center center;
-            color: var(--text);
-            font-family: 'Space Mono', monospace;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            /* Technical Grid Background */
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px), 
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            font-family: 'Space Mono', monospace;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* Smooth, subtle marquee */
-        .marquee {
-            background-color: var(--acid);
-            color: var(--bg);
-            padding: 8px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .marquee span {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 25s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
+        /* 1. The Noise Overlay (from your uploaded gif) */
+        .noise {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background-image: url('noise.gif');
+            opacity: 0.04; /* Very subtle, just like byld.dev */
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        /* Header */
-        header {
-            text-align: center;
-            padding: 80px 20px 20px;
-        }
-        header h1 {
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 3rem;
-            color: white;
-            margin: 0;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-        }
-        header span.acid-text {
-            color: var(--acid);
-        }
-
-        /* Main Content Container */
-        .container {
-            max-width: 550px;
-            margin: 0 auto 80px;
-            padding: 20px;
-            width: 100%;
-        }
-
-        /* Minimal Grunge Card */
-        .ticket-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            box-shadow: 8px 8px 0px rgba(204, 255, 0, 0.05); /* Very subtle acid shadow */
-            padding: 50px 40px;
-            text-align: center;
-            position: relative;
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, border-color 0.4s ease;
-        }
-        
-        /* Smooth Hover Glow */
-        .ticket-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 10px 15px 0px rgba(204, 255, 0, 0.2); 
-            border-color: var(--acid);
-        }
-
-        /* Corner Tech Accents */
-        .ticket-card::before, .ticket-card::after {
-            content: '';
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            border: 2px solid var(--acid);
-            opacity: 0.5;
-            transition: opacity 0.3s;
-        }
-        .ticket-card::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-        .ticket-card::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-        .ticket-card:hover::before, .ticket-card:hover::after { opacity: 1; }
-
-        .event-title {
-            font-family: 'Archivo Black', sans-serif;
-            color: white;
-            font-size: 3.8rem;
-            margin: 0 0 15px 0;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-        }
-
-        .badge {
-            display: inline-block;
-            border: 1px solid var(--acid);
-            color: var(--acid);
-            padding: 4px 12px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 35px;
-        }
-
-        /* Details */
-        .details {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 40px;
-            padding: 25px 0;
-            border-top: 1px dashed #333;
-            border-bottom: 1px dashed #333;
-            color: #888;
-        }
-        .details strong {
-            color: white;
-            font-weight: normal;
-        }
-
-        /* Checkout Box Area */
-        .buy-button-container {
-            margin-top: 20px;
+        /* 2. Top Technical Header (.casedata from Byld) */
+        .casedata {
             display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .casedata__jp {
+            font-family: sans-serif;
+            color: var(--acid-red);
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .casedata__right { text-align: right; }
+        .casedata__mid { text-align: center; }
+
+        /* 3. Hero Logo Section */
+        .logo-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-section img {
+            max-width: 100%;
+            width: 600px; /* Fits the red barcode logo nicely */
+            filter: drop-shadow(0px 0px 20px rgba(255, 26, 26, 0.2));
+        }
+
+        /* 4. Main Content Area */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Byld's signature vertical stacked header */
+        .header {
+            width: 25%;
+            min-width: 200px;
+            border-right: 1px solid var(--border-color);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        .header__title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 3.5rem;
+            line-height: 0.9;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .header__glyph {
+            font-family: sans-serif;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            margin-top: 40px;
+        }
+
+        /* Content Next to Header */
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
         }
 
-        /* Aesthetic Barcode Footer */
-        .barcode {
-            font-family: 'Space Mono', monospace;
-            font-size: 2rem;
-            color: #222;
-            text-align: center;
-            letter-spacing: -2px;
-            margin-top: 50px;
-            user-select: none;
+        .text__item {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-bottom: 30px;
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            header { padding: 50px 20px 10px; }
-            header h1 { font-size: 2.2rem; }
-            .ticket-card { padding: 40px 25px; }
-            .event-title { font-size: 2.8rem; }
-            .details { font-size: 1rem; }
+        .text__item .highlight {
+            color: var(--acid-red);
+            font-weight: bold;
+        }
+
+        /* Technical Data Box (Like Byld's process steps) */
+        .tech-box {
+            border: 1px solid var(--border-color);
+            background: rgba(20, 20, 20, 0.8);
+            padding: 20px;
+            margin-bottom: 40px;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .tech-box::before {
+            content: ''; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid var(--acid-yellow); border-left: 2px solid var(--acid-yellow);
+        }
+
+        .tech-box p { margin: 8px 0; font-size: 0.9rem; color: var(--text-dim); }
+        .tech-box span { color: var(--text-main); }
+
+        /* Checkout Section */
+        .checkout-container {
+            border: 1px solid var(--acid-red);
+            background: rgba(255, 26, 26, 0.05);
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .checkout-container h3 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--acid-red);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 900px) {
+            .section { flex-direction: column; }
+            .header { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 30px 20px; }
+            .header__title { font-size: 3rem; br { display: none; } }
+            .content { padding: 30px 20px; }
+            .casedata { padding: 15px 20px; font-size: 0.65rem; }
+            .casedata__mid { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="marquee">
-        <span>VOL 01 // TICKETS OUT SOON // NO PRE-BOOZING JUST BYOB // LIVE BANDS // BARCODE BOMBAY // POPROCKS // </span>
-    </div>
+    <div class="noise"></div>
 
-    <header>
-        <h1>BARCODE <span class="acid-text">BOMBAY</span></h1>
-    </header>
+    <div class="casedata">
+        <div class="casedata__left">
+            <span class="casedata__jp">バーコード</span>
+            <div>PN: BRC-VOL1 <br> DO NOT REMOVE DURING OPERATION</div>
+        </div>
 
-    <div class="container">
-        <div class="ticket-card">
-            <h2 class="event-title">POPROCKS</h2>
-            <div class="badge">Volume 01</div>
-            
-            <div class="details">
-                <p>DATE // <strong>18TH MARCH 2026</strong></p>
-                <p>TIME // <strong>5:00 PM</strong></p>
-                <p>LOC // <strong>THE LITTLE HOUSE, VERSOVA</strong></p>
-            </div>
-
-            <div class="buy-button-container">
-                </div>
+        <div class="casedata__mid">
+            <span class="casedata__jp">ソフトウェア</span>
+            <div>BATCH: 03/2026-A1 <br> TOL: ±0.02mm</div>
         </div>
         
-        <div class="barcode">
-            ||| || ||| | ||| || ||| | ||| || |||
+        <div class="casedata__right">
+            <div>SN: 002194-C <br> MAT: POPROCKS-T6</div>
+            <span class="casedata__jp" style="margin-top: 5px;">信頼</span>
         </div>
+    </div>
+
+    <div class="logo-section">
+        <img src="barcode logo4.png" alt="Barcode Bombay Logo">
+    </div>
+
+    <div class="main-container">
+        
+        <div class="section" id="about">
+            <div class="header">
+                <div class="header__title">A<br> Bo<br> Ut</div>
+                <div class="header__glyph">私たちがしていること</div>
+            </div>
+            <div class="content">
+                <div class="text__item">
+                    <span class="highlight">Barcode Bombay</span> was built for those who are serious about raw experiences — and tired of dealing with sloppy execution. 
+                </div>
+                <div class="text__item">
+                    Our curation is <span class="highlight">clean</span>, our process is <span class="highlight">transparent</span>. No pre-boozing. Just BYOB and live bands. We build with precision for the underground.
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="tickets">
+            <div class="header">
+                <div class="header__title">POP<br> ROC<br> KS</div>
+                <div class="header__glyph">どのように構築するか</div>
+            </div>
+            
+            <div class="content">
+                <div class="tech-box">
+                    <p>>>> [ SYS.DATE ]: <span>18TH MARCH 2026</span></p>
+                    <p>>>> [ SYS.TIME ]: <span>5:00 PM ONWARDS</span></p>
+                    <p>>>> [ SYS.LOC ]: <span>THE LITTLE HOUSE, VERSOVA</span></p>
+                    <p>>>> [ SYS.RULE ]: <span style="color: var(--acid-yellow);">LIVE BANDS | BYOB</span></p>
+                </div>
+
+                <div class="checkout-container">
+                    <h3>POPROCKS</h3>
+                    <p style="margin-bottom: 20px; color: var(--text-dim);">VOL 01. SECURE YOUR SPOT.</p>
+                    
+                    </div>
+            </div>
+        </div>
+
     </div>
 
 </body>
