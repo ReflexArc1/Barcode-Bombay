@@ -14,9 +14,13 @@
             --black: #050505;
         }
 
+        /* Added box-sizing to keep borders from breaking the width */
+        * {
+            box-sizing: border-box; 
+        }
+
         body {
             background-color: var(--acid-yellow);
-            /* Halftone dot pattern effect */
             background-image: radial-gradient(var(--black) 1px, transparent 1px);
             background-size: 20px 20px;
             color: var(--black);
@@ -66,7 +70,6 @@
             text-shadow: 5px 5px 0 var(--black), -5px -5px 0 var(--neon-blue);
             line-height: 0.9;
         }
-        @media (max-width: 600px) { header h1 { font-size: 3.5rem; } }
         
         header p {
             font-size: 1.5rem;
@@ -84,6 +87,7 @@
             max-width: 700px;
             margin: 60px auto;
             padding: 20px;
+            width: 100%;
         }
 
         .ticket-card {
@@ -166,6 +170,43 @@
             color: white;
             padding: 20px 0;
         }
+
+        /* --- MOBILE FIXES --- */
+        @media (max-width: 600px) {
+            header h1 { 
+                font-size: 3.5rem; 
+                text-shadow: 3px 3px 0 var(--black), -3px -3px 0 var(--neon-blue);
+            }
+            .container {
+                margin: 30px auto;
+                padding: 15px;
+            }
+            .ticket-card {
+                padding: 30px 15px;
+                border-width: 6px;
+                box-shadow: 12px 12px 0px var(--neon-blue); /* Shrink shadow to fit screen */
+            }
+            .ticket-card::before {
+                font-size: 3.5rem;
+                top: -25px;
+                left: -15px; /* Pull the explosion inward */
+            }
+            .event-title {
+                font-size: 3.2rem; /* Shrink title so it doesn't break boundaries */
+                text-shadow: 3px 3px 0 var(--black), 5px 5px 0 var(--neon-green);
+            }
+            .details {
+                font-size: 1.1rem;
+                padding: 15px 0;
+            }
+            .buy-button-container {
+                padding: 15px;
+            }
+            .barcode {
+                font-size: 2rem;
+                letter-spacing: -2px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -201,3 +242,4 @@
 
 </body>
 </html>
+
