@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Bombay | Events</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Inter', Helvetica, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .logo-placeholder img {
+            max-height: 40px;
+            /* Once you have the logo, it will scale nicely here */
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        /* Hero Section */
+        header {
+            text-align: center;
+            padding: 100px 20px 60px;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            color: #888;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Event/Product Section */
+        .events-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px 100px;
+        }
+
+        .event-card {
+            background-color: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            border-color: #444;
+        }
+
+        .event-tag {
+            display: inline-block;
+            background: #fff;
+            color: #000;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .event-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .event-details {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* Placeholder for Razorpay Button */
+        .buy-button-container {
+            width: 100%;
+            text-align: center;
+        }
+
+        .mock-btn {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 15px 30px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .mock-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #1a1a1a;
+            color: #555;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-placeholder">
+            <div class="logo-text">Barcode Bombay</div>
+        </div>
+        <div>
+            </div>
+    </nav>
+
+    <header>
+        <h1>Next Generation Events.</h1>
+        <p>Curated experiences and seamless ticketing. Secure your spot below.</p>
+    </header>
+
+    <section class="events-container">
+        <div class="event-card">
+            <span class="event-tag">Test Event</span>
+            <h2 class="event-title">Volume 01: The Launch</h2>
+            <div class="event-details">
+                <p><strong>Date:</strong> Coming Soon</p>
+                <p><strong>Venue:</strong> TBA, Mumbai</p>
+                <p><strong>Price:</strong> ₹999</p>
+            </div>
+            
+            <div class="buy-button-container">
+                <button class="mock-btn">Buy Ticket</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Barcode Bombay. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
