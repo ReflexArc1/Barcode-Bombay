@@ -87,22 +87,22 @@
         .hero-center {
             animation: heroReveal 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             animation-delay: 2.2s;
-            opacity: 0;
+            opacity: 1; /* Content is visible immediately to be seen through the B hole */
             transform: scale(0.95) translateY(20px);
         }
         
         nav, .hero-meta {
             animation: fadeUp 1.5s ease forwards;
             animation-delay: 2.5s;
-            opacity: 0;
+            opacity: 1; /* Content is visible immediately to be seen through the B hole */
             transform: translateY(15px);
         }
 
         @keyframes heroReveal {
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            to { transform: scale(1) translateY(0); }
         }
         @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
+            to { transform: translateY(0); }
         }
 
         .noise {
