@@ -488,6 +488,10 @@
         }
 
         .cdown-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             padding: 16px 24px;
             border: 1px solid rgba(77, 136, 255, 0.3);
@@ -1457,10 +1461,11 @@
             .lineup-grid,
             .tickets-grid,
             .testi-grid {
-                grid-template-columns: auto;
+                grid-template-columns: 1fr;
             }
 
-            .past-featured {
+            .past-featured,
+            .headliner-card {
                 grid-column: span 1;
             }
 
@@ -1549,7 +1554,7 @@
             }
 
             .cdown-unit {
-                padding: 12px 10px;
+                padding: 16px 5px 8px; /* Tweak to visually center the font's high baseline */
                 min-width: auto;
                 flex: 1;
             }
@@ -1772,6 +1777,14 @@
 
         body.brutalist-mode .marquee-track span {
             color: #000;
+        }
+
+        @media (max-width: 768px) {
+            body.brutalist-mode .hero-event-title,
+            body.brutalist-mode .cdown-num {
+                /* Scale down the massive brutalist shadows on mobile so they don't break the typography */
+                text-shadow: 2px 2px 0 var(--red), -1px -1px 0 var(--blue);
+            }
         }
 
         /* BRUTALIST COUPON OVERRIDES */
