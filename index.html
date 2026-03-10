@@ -60,20 +60,19 @@
             position: absolute;
             width: 100vw;
             height: 100vh;
-            /* Zoom directly into the absolute center of the SVG on all devices */
-            transform-origin: center; 
+            /* For an Impact 'B' centered at 50vh, the bottom loop is mathematically from 50vh to ~67.5vh. */
+            /* This makes the center of the bottom hole precisely at 58.75% height. */
+            transform-origin: 50% 59%; 
             animation: introZoom 2.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
             animation-delay: 0.5s;
             will-change: transform;
         }
-        
-        /* Removed all media-query transform-origin hacks since the hole is now perfectly centered in the SVG coordinate space */
 
         @keyframes introZoom {
             0% { transform: scale(1); opacity: 1; }
             10% { transform: scale(0.95); opacity: 1; }
-            50% { opacity: 1; }
-            80% { transform: scale(150); opacity: 0; }
+            45% { opacity: 1; }            /* Keep it visible slightly longer before hiding to avoid clipping */
+            75% { transform: scale(150); opacity: 0; }
             100% { transform: scale(300); opacity: 0; }
         }
 
@@ -1526,15 +1525,16 @@
 
     <!-- ═══ INTRO LOADER ═══ -->
     <div id="intro-wrapper">
-        <svg id="loader-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+        <!-- Strictly using vh/vw completely removes unexpected SVG Aspect Ratio cropping issues on narrow/wide screens -->
+        <svg id="loader-svg" width="100vw" height="100vh">
             <defs>
                 <mask id="b-mask">
-                    <rect width="100%" height="100%" fill="white" />
-                    <!-- Made the B a little smaller visually, and shifted its position up and left so the actual physical bottom-loop hole lands dead-center in the 1000x1000 viewport. -->
-                    <text x="47%" y="42%" text-anchor="middle" dominant-baseline="central" fill="black" font-family="'Impact', 'Arial Black', sans-serif" font-size="450px" font-weight="900">B</text>
+                    <rect width="100vw" height="100vh" fill="white" />
+                    <!-- Centered physically. 35vh is robust for both widescreen and tall-screen scaling. -->
+                    <text x="50vw" y="50vh" text-anchor="middle" dominant-baseline="central" fill="black" font-family="'Impact', 'Arial Black', sans-serif" font-size="35vh" font-weight="900">B</text>
                 </mask>
             </defs>
-            <rect width="100%" height="100%" fill="#050505" mask="url(#b-mask)" />
+            <rect width="100vw" height="100vh" fill="#050505" mask="url(#b-mask)" />
         </svg>
     </div>
 
