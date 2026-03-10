@@ -226,6 +226,7 @@
             background: transparent;
             cursor: pointer;
             text-transform: uppercase;
+            color: var(--text-main);
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
             overflow: hidden;
@@ -620,6 +621,99 @@
             color: var(--red);
         }
 
+        /* ─── COUPON COMPONENT ─── */
+        .coupon-wrapper {
+            max-width: 1300px;
+            margin: 80px auto 20px;
+            border: 1px solid rgba(77, 136, 255, 0.3);
+            background: rgba(77, 136, 255, 0.05);
+            border-radius: 8px;
+            padding: 2px;
+            transition: all 0.3s;
+        }
+
+        .coupon-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr 280px;
+            gap: 2px;
+            min-height: 250px;
+        }
+
+        .cpn-panel {
+            background: var(--bg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cpn-left h2 {
+            font-size: 32px;
+            line-height: 0.9;
+            color: var(--blue);
+            text-transform: uppercase;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+        }
+
+        .cpn-mid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            background: transparent;
+            padding: 0;
+        }
+
+        .cpn-top, .cpn-bot {
+            background: var(--bg);
+            padding: 24px 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cpn-top h2 {
+            font-size: clamp(32px, 4vw, 56px);
+            font-family: 'Impact', sans-serif;
+            color: var(--text-main);
+            text-transform: uppercase;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .cpn-bot h3 {
+            font-size: 14px;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        
+        .cpn-bot h2 {
+            font-size: clamp(28px, 3.5vw, 48px);
+            font-family: 'Impact', sans-serif;
+            color: var(--blue);
+            text-transform: uppercase;
+        }
+
+        .cpn-right {
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+        }
+        
+        .cpn-right .so-back {
+            font-size: 38px;
+            font-family: serif;
+            font-style: italic;
+            color: var(--red);
+            line-height: 1;
+        }
+
+        .cpn-logo {
+            width: 100px;
+            filter: drop-shadow(0 0 10px rgba(77, 136, 255, 0.5));
+        }
+
         /* ─── WHAT WE DO ─── */
         .whatwedo-inner {
             max-width: 1300px;
@@ -967,6 +1061,11 @@
 
         .artist-card:hover::before {
             opacity: 1;
+        }
+
+        .headliner-card {
+            grid-column: span 2;
+            background: rgba(255, 42, 42, 0.02);
         }
 
         .artist-num {
@@ -1535,6 +1634,192 @@
             }
 
         }
+
+        /* ---------------- BRUTALIST MODE TOGGLE ---------------- */
+        body.brutalist-mode {
+            --bg: #f4efeb;          /* Bleached paper */
+            --text-main: #111111;
+            --text-muted: #555555;
+            --surface: #ffffff;
+            --surface-hover: #ffeb33;
+            --red: #ff1100;
+            --blue: #0011ff;
+            --pink: #ff66cc;
+            --yellow: #ffeb33;
+        }
+
+        body.brutalist-mode .noise,
+        body.brutalist-mode .scanlines,
+        body.brutalist-mode .hero-video,
+        body.brutalist-mode .hero-vignette,
+        body.brutalist-mode .hero-grid {
+            display: none !important; /* Strip cyberpunk fluff */
+        }
+
+        body.brutalist-mode .btn {
+            border: 2px solid #000;
+            color: #000;
+            background: var(--yellow);
+            box-shadow: 4px 4px 0 #000;
+            border-radius: 0;
+            font-weight: 900;
+        }
+
+        body.brutalist-mode .btn::after {
+            display: none;
+        }
+
+        body.brutalist-mode .btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 7px 7px 0 #000;
+            background: var(--pink);
+            color: #000;
+        }
+        
+        body.brutalist-mode .btn.btn-red { background: var(--surfce); }
+
+        body.brutalist-mode .nav-item {
+            color: #111;
+            font-weight: 700;
+        }
+
+        body.brutalist-mode .nav-item:hover {
+            color: var(--blue);
+            text-shadow: 2px 2px 0 var(--yellow);
+            transform: none;
+        }
+
+        body.brutalist-mode .section-title {
+            font-weight: 900;
+            color: #000;
+        }
+        
+        body.brutalist-mode .section-title em {
+            color: var(--pink);
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        /* Solid block shadow replacements */
+        body.brutalist-mode .about-specs,
+        body.brutalist-mode .wwd-grid,
+        body.brutalist-mode .past-grid,
+        body.brutalist-mode .lineup-grid,
+        body.brutalist-mode a.artist-card {
+            border: 3px solid #000;
+            box-shadow: 8px 8px 0 var(--blue);
+            background: #000; /* for grid gaps */
+            gap: 3px;
+        }
+        
+        body.brutalist-mode hr.rule {
+            border-top: 3px dashed #000;
+        }
+
+        body.brutalist-mode .spec-cell,
+        body.brutalist-mode .wwd-card,
+        body.brutalist-mode .past-card,
+        body.brutalist-mode .artist-card,
+        body.brutalist-mode .ticket-card {
+            border: none;
+            background: #fff;
+            color: #000;
+        }
+
+        body.brutalist-mode .headliner-card {
+            background: var(--pink);
+        }
+
+        body.brutalist-mode .ticket-card {
+            border: 3px solid #000;
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        body.brutalist-mode .ticket-card.featured {
+            background: var(--yellow);
+            box-shadow: 8px 8px 0 var(--red);
+            border-color: #000;
+        }
+
+        body.brutalist-mode .ticket-price {
+            color: #000;
+            font-weight: 900;
+            text-shadow: none;
+        }
+        
+        body.brutalist-mode .hero-event-title,
+        body.brutalist-mode .cdown-num {
+            color: #fff;
+            -webkit-text-stroke: 1px #000;
+            text-shadow: 4px 4px 0 var(--red), -2px -2px 0 var(--blue);
+        }
+
+        body.brutalist-mode .cdown-unit {
+            background: #fff;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            color: #000;
+        }
+        
+        body.brutalist-mode .marquee-wrap {
+            background: var(--yellow);
+            border-top: 4px solid #000;
+            border-bottom: 4px solid #000;
+            transform: rotate(-1.5deg) scale(1.05); /* Paste-up look */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 100;
+        }
+
+        body.brutalist-mode .marquee-track span {
+            color: #000;
+        }
+
+        /* BRUTALIST COUPON OVERRIDES */
+        body.brutalist-mode .coupon-wrapper {
+            border: 4px dashed #000;
+            background: transparent;
+            border-radius: 0;
+            padding: 4px;
+            transform: rotate(1deg);
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+        }
+        
+        body.brutalist-mode .coupon-grid {
+            background: #000;
+            gap: 4px;
+            border: 4px solid #000;
+        }
+
+        body.brutalist-mode .cpn-panel,
+        body.brutalist-mode .cpn-top,
+        body.brutalist-mode .cpn-bot {
+            border: none;
+        }
+
+        body.brutalist-mode .cpn-left { background: var(--blue); }
+        body.brutalist-mode .cpn-left h2 { color: #fff; text-shadow: none; -webkit-text-stroke: 0; }
+
+        body.brutalist-mode .cpn-top { background: var(--red); }
+        body.brutalist-mode .cpn-top h2 { color: #fff; text-shadow: 3px 3px 0 #000; }
+
+        body.brutalist-mode .cpn-bot { background: var(--pink); }
+        body.brutalist-mode .cpn-bot h3 { color: #fff; font-weight: 900; -webkit-text-stroke: 1px #fff; }
+        body.brutalist-mode .cpn-bot h2 { color: #fff; text-shadow: 3px 3px 0 #000; }
+
+        body.brutalist-mode .cpn-right { background: var(--yellow); }
+        body.brutalist-mode .cpn-right .so-back { 
+            color: var(--pink); 
+            -webkit-text-stroke: 1px var(--blue); 
+            text-shadow: 2px 2px 0 var(--blue);
+            font-weight: 900;
+        }
+        body.brutalist-mode .cpn-logo { filter: contrast(2) drop-shadow(4px 4px 0 #000); }
+
+        @media (max-width: 900px) {
+            .coupon-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
@@ -1577,6 +1862,7 @@
                 <a class="nav-item" href="#tickets">[06] TICKETS</a>
             </div>
             <div class="nav-actions">
+                <button id="theme-toggle" class="btn">[ MODE ]</button>
                 <button class="btn btn-blue">TELL US ABOUT YOUR EVENT</button>
                 <button id="rzp-button1" class="btn btn-red rzp-ticket" data-amount="149900"
                     data-desc="Ticket — Barcode Bombay">GET TICKETS →</button>
@@ -1632,8 +1918,34 @@
         </div>
     </div>
 
+    <!-- ═══ BRUTALIST COUPON ═══ -->
+    <section>
+        <div class="coupon-wrapper fade-in">
+            <div class="coupon-grid">
+                <div class="cpn-panel cpn-left">
+                    <h2>BARCODE<br>BOMBAY<br>VOLUME 1</h2>
+                </div>
+                <div class="cpn-panel cpn-mid">
+                    <div class="cpn-top">
+                        <h2>18TH MARCH 2026<br>THE LITTLE HOUSE, VERSOVA</h2>
+                    </div>
+                    <div class="cpn-bot">
+                        <h3>LIVE BANDS | BYOB</h3>
+                        <h2>5:00PM ONWARDS!</h2>
+                    </div>
+                </div>
+                <div class="cpn-panel cpn-right">
+                    <div class="cpn-art">
+                        <div class="so-back" style="margin-bottom: 20px;">We Are<br>SO BACK</div>
+                        <img src="barcode logo4.svg" class="cpn-logo" alt="Barcode">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ═══ [01] ABOUT ═══ -->
-    <section id="about">
+    <section id="about" style="padding-top: 20px;">
         <div class="about-inner">
             <div class="fade-in">
                 <div class="section-label">[01] ABOUT</div>
@@ -1706,7 +2018,7 @@
                     <div class="artist-genre">NOISE // EXPERIMENTAL</div>
                     <div class="artist-time">20:00 — 22:00</div>
                 </div>
-                <div class="artist-card" style="grid-column:span 2;background:rgba(255,42,42,0.02);">
+                <div class="artist-card headliner-card">
                     <div class="artist-num">[HEADLINER]</div>
                     <div class="artist-name" style="font-size:clamp(24px,3.5vw,42px);">CLASSIFIED</div>
                     <div class="artist-genre">ANNOUNCEMENT SOON</div>
@@ -1874,6 +2186,18 @@
         }
         document.querySelectorAll('.rzp-ticket').forEach(function (btn) {
             btn.addEventListener('click', function (e) { e.preventDefault(); openRazorpay(parseInt(btn.dataset.amount || '149900'), btn.dataset.desc || 'Ticket'); });
+        });
+        
+        // ── THEME TOGGLE ──
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('brutalist-mode');
+            
+            // Adjust the button text based on state
+            if(document.body.classList.contains('brutalist-mode')) {
+                this.textContent = '[ CYBERPUNK ]';
+            } else {
+                this.textContent = '[ BRUTALIZE ]';
+            }
         });
     </script>
 </body>
