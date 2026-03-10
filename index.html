@@ -24,7 +24,7 @@
             position: relative;
         }
 
-        /* The Grid provided from your snippet, updated to the blue accent color */
+        /* Perspective Grid using your snippet */
         body::before {
             content: "";
             position: fixed;
@@ -34,9 +34,12 @@
             height: 100%;
             z-index: -1;
             background-image: 
-                linear-gradient(rgba(0, 212, 255, 0.15) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(0, 212, 255, 0.15) 1px, transparent 1px);
-            background-size: 40px 40px;
+                linear-gradient(rgba(0, 212, 255, 0.25) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(0, 212, 255, 0.25) 1px, transparent 1px);
+            background-size: 40px 40px; 
+            /* Added slight perspective to mimic the "ceiling" look from your first image */
+            transform: perspective(600px) rotateX(-60deg) scale(2);
+            transform-origin: top;
         }
 
         /* Subtle noise texture overlay */
@@ -118,7 +121,7 @@
             text-align: right;
         }
 
-        /* BOTTOM SECTION - GLOWING RED BARCODE */
+        /* BOTTOM SECTION - SVG LOGO */
         .bottom-section {
             flex-grow: 1;
             display: flex;
@@ -128,30 +131,12 @@
             z-index: 1;
         }
 
-        .barcode-container {
-            display: flex;
-            height: 200px; /* Adjust height as needed */
+        .logo-svg {
             width: 75%;
             max-width: 1000px;
-            gap: 3px;
-            justify-content: space-between;
+            /* Drop shadow creates the neon glow wrapping exactly around the SVG shapes */
+            filter: drop-shadow(0 0 10px var(--primary-red)) drop-shadow(0 0 25px var(--primary-red));
         }
-
-        .bar {
-            height: 100%;
-            background-color: var(--primary-red);
-            /* This drop shadow creates the neon glow on each individual bar */
-            box-shadow: 0 0 10px var(--primary-red), 0 0 25px var(--primary-red);
-            border-radius: 1px;
-        }
-
-        /* Varying widths for the barcode lines */
-        .w-1 { flex: 0.5; }
-        .w-2 { flex: 1.5; }
-        .w-3 { flex: 2.5; }
-        .w-4 { flex: 4; }
-        .w-5 { flex: 6; }
-        .w-space { flex: 3; background: transparent; box-shadow: none; }
 
     </style>
 </head>
@@ -191,46 +176,7 @@
     </div>
 
     <div class="bottom-section">
-        <div class="barcode-container">
-            <div class="bar w-2"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-4"></div>
-            <div class="bar w-1"></div>
-            <div class="w-space"></div>
-            <div class="bar w-3"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-5"></div>
-            <div class="bar w-2"></div>
-            <div class="w-space"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-4"></div>
-            <div class="bar w-2"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-3"></div>
-            <div class="w-space"></div>
-            <div class="bar w-5"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-2"></div>
-            <div class="bar w-4"></div>
-            <div class="w-space"></div>
-            <div class="bar w-3"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-5"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-2"></div>
-            <div class="w-space"></div>
-            <div class="bar w-4"></div>
-            <div class="bar w-2"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-3"></div>
-            <div class="bar w-5"></div>
-            <div class="w-space"></div>
-            <div class="bar w-2"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-4"></div>
-            <div class="bar w-1"></div>
-            <div class="bar w-3"></div>
-        </div>
+        <img src="barcode logo4.svg" alt="Barcode Logo" class="logo-svg">
     </div>
 
 </body>
