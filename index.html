@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barcode Bombay | POPROCKS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* Importing your custom ticketing font */
+        @font-face {
+            font-family: 'Ticketing';
+            src: url('ticketing (1).woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
-            --bg-dark: #070707;
-            --text-main: #EDEDED;
-            --text-dim: #777777;
-            --acid-red: #FF1A1A; /* From your ticket */
-            --acid-yellow: #FFDE00; /* From your ticket */
-            --grid-line: rgba(255, 255, 255, 0.06);
-            --border-color: #222222;
+            --bg-base: #0e0e0e;
+            --text-main: #ffffff;
+            --text-muted: #89898a;
+            --accent-red: #CE372E; /* Byld's specific red */
+            --border-line: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -22,234 +30,259 @@
             padding: 0;
         }
 
-        body {
-            background-color: var(--bg-dark);
-            /* Technical Grid Background */
-            background-image: 
-                linear-gradient(var(--grid-line) 1px, transparent 1px), 
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 40px 40px;
+        body, html {
+            background-color: var(--bg-base);
             color: var(--text-main);
-            font-family: 'Space Mono', monospace;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* 1. The Noise Overlay (from your uploaded gif) */
-        .noise {
+        /* 1. TV Static Noise Overlay */
+        .noise-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             width: 100vw; height: 100vh;
             background-image: url('noise.gif');
-            opacity: 0.04; /* Very subtle, just like byld.dev */
+            opacity: 0.04;
             pointer-events: none;
             z-index: 9999;
         }
 
-        /* 2. Top Technical Header (.casedata from Byld) */
+        /* 2. Massive Background Logo Watermark */
+        .bg-logo {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120vw;
+            min-width: 1000px;
+            opacity: 0.02; /* Barely visible, deep underground vibe */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 3. Byld Technical Grid */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image:
+                linear-gradient(var(--border-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 4. Top Technical Header (The "Casedata" bar) */
         .casedata {
+            position: relative;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
             padding: 20px 40px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-line);
+            font-family: 'Space Mono', monospace;
             font-size: 0.75rem;
-            line-height: 1.5;
-            color: var(--text-dim);
+            line-height: 1.6;
+            color: var(--text-muted);
             text-transform: uppercase;
+            background: rgba(14, 14, 14, 0.85);
+            backdrop-filter: blur(12px);
         }
+        .casedata > div { flex: 1; }
+        .casedata .mid { text-align: center; }
+        .casedata .right { text-align: right; }
+        .casedata .jp { color: var(--accent-red); display: block; letter-spacing: 4px; margin-bottom: 4px; font-family: sans-serif; }
 
-        .casedata__jp {
-            font-family: sans-serif;
-            color: var(--acid-red);
-            letter-spacing: 4px;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .casedata__right { text-align: right; }
-        .casedata__mid { text-align: center; }
-
-        /* 3. Hero Logo Section */
-        .logo-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 80px 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo-section img {
-            max-width: 100%;
-            width: 600px; /* Fits the red barcode logo nicely */
-            filter: drop-shadow(0px 0px 20px rgba(255, 26, 26, 0.2));
-        }
-
-        /* 4. Main Content Area */
-        .main-container {
+        /* 5. Main Layout Structure */
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
             display: flex;
             flex-direction: column;
         }
 
         .section {
             display: flex;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-line);
+            min-height: 75vh;
         }
 
-        /* Byld's signature vertical stacked header */
-        .header {
-            width: 25%;
-            min-width: 200px;
-            border-right: 1px solid var(--border-color);
-            padding: 40px;
+        /* Byld's Stacked Brutalist Header */
+        .section-header {
+            width: 350px;
+            min-width: 350px;
+            border-right: 1px solid var(--border-line);
+            padding: 60px 40px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background-color: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        .header__title {
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 3.5rem;
-            line-height: 0.9;
+        .section-title {
+            font-family: 'Ticketing', sans-serif;
+            font-size: 5.5rem;
+            line-height: 0.85;
             color: var(--text-main);
             text-transform: uppercase;
         }
 
-        .header__glyph {
-            font-family: sans-serif;
-            color: var(--text-dim);
+        .section-glyph {
+            font-family: 'Space Mono', monospace;
             font-size: 0.8rem;
+            color: var(--text-muted);
             letter-spacing: 2px;
-            margin-top: 40px;
         }
 
-        /* Content Next to Header */
-        .content {
+        /* Content Area */
+        .section-content {
             flex-grow: 1;
-            padding: 40px;
+            padding: 60px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .text__item {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            max-width: 700px;
-            margin-bottom: 30px;
-        }
-
-        .text__item .highlight {
-            color: var(--acid-red);
-            font-weight: bold;
-        }
-
-        /* Technical Data Box (Like Byld's process steps) */
-        .tech-box {
-            border: 1px solid var(--border-color);
-            background: rgba(20, 20, 20, 0.8);
-            padding: 20px;
+        .hero-logo {
+            max-width: 350px;
             margin-bottom: 40px;
-            max-width: 600px;
+        }
+
+        .terminal-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 650px;
+            margin-bottom: 50px;
+            color: var(--text-muted);
+        }
+        .terminal-text strong {
+            color: var(--text-main);
+            font-weight: normal;
+        }
+        .terminal-text .highlight {
+            color: var(--accent-red);
+        }
+
+        /* 6. Neater Checkout Component */
+        .checkout-module {
+            border: 1px solid var(--border-line);
+            background: #121212;
+            padding: 40px;
+            max-width: 450px;
             position: relative;
+            transition: border-color 0.3s;
+        }
+        .checkout-module:hover {
+            border-color: var(--accent-red);
+        }
+        
+        /* Red accent line mimicking Byld UI */
+        .checkout-module::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px;
+            width: 30px; height: 3px;
+            background: var(--accent-red);
+            transition: width 0.3s;
+        }
+        .checkout-module:hover::before { width: 100%; }
+
+        .checkout-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-line);
+        }
+        .checkout-title {
+            font-family: 'Ticketing', sans-serif;
+            font-size: 3rem;
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1;
+        }
+        .checkout-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-red);
+            margin-top: 10px;
+            letter-spacing: 1px;
         }
 
-        .tech-box::before {
-            content: ''; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid var(--acid-yellow); border-left: 2px solid var(--acid-yellow);
+        /* Wrap Razorpay in a clean flex container */
+        .razorpay-wrapper {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
         }
 
-        .tech-box p { margin: 8px 0; font-size: 0.9rem; color: var(--text-dim); }
-        .tech-box span { color: var(--text-main); }
-
-        /* Checkout Section */
-        .checkout-container {
-            border: 1px solid var(--acid-red);
-            background: rgba(255, 26, 26, 0.05);
-            padding: 30px;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .checkout-container h3 {
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--acid-red);
-        }
-
-        /* Mobile Responsiveness */
+        /* Mobile View */
         @media (max-width: 900px) {
             .section { flex-direction: column; }
-            .header { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 30px 20px; }
-            .header__title { font-size: 3rem; br { display: none; } }
-            .content { padding: 30px 20px; }
-            .casedata { padding: 15px 20px; font-size: 0.65rem; }
-            .casedata__mid { display: none; }
+            .section-header { width: 100%; border-right: none; border-bottom: 1px solid var(--border-line); padding: 40px 20px; min-height: auto; }
+            .section-title { font-size: 4rem; br { display: none; } }
+            .section-content { padding: 40px 20px; }
+            .casedata { padding: 15px; font-size: 0.65rem; }
+            .casedata .mid { display: none; }
+            .hero-logo { max-width: 250px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="noise"></div>
+    <div class="noise-overlay"></div>
+    <div class="grid-bg"></div>
+    <img src="barcode logo 0.png" class="bg-logo" alt="Background Logo">
 
     <div class="casedata">
-        <div class="casedata__left">
-            <span class="casedata__jp">バーコード</span>
-            <div>PN: BRC-VOL1 <br> DO NOT REMOVE DURING OPERATION</div>
+        <div class="left">
+            <span class="jp">バーコード</span>
+            <div>PN: 2483-AX9 <br> SYSTEM INITIATED</div>
         </div>
-
-        <div class="casedata__mid">
-            <span class="casedata__jp">ソフトウェア</span>
-            <div>BATCH: 03/2026-A1 <br> TOL: ±0.02mm</div>
+        <div class="mid">
+            <span class="jp">ソフトウェア</span>
+            <div>BATCH: VOL.01 <br> TOL: ±0.02mm</div>
         </div>
-        
-        <div class="casedata__right">
-            <div>SN: 002194-C <br> MAT: POPROCKS-T6</div>
-            <span class="casedata__jp" style="margin-top: 5px;">信頼</span>
+        <div class="right">
+            <div>SN: 002194-C <br> MAT: AL6061-T6</div>
+            <span class="jp" style="margin-top: 4px;">信頼</span>
         </div>
     </div>
 
-    <div class="logo-section">
-        <img src="barcode logo4.png" alt="Barcode Bombay Logo">
-    </div>
-
-    <div class="main-container">
+    <div class="main-wrapper">
         
-        <div class="section" id="about">
-            <div class="header">
-                <div class="header__title">A<br> Bo<br> Ut</div>
-                <div class="header__glyph">私たちがしていること</div>
-            </div>
-            <div class="content">
-                <div class="text__item">
-                    <span class="highlight">Barcode Bombay</span> was built for those who are serious about raw experiences — and tired of dealing with sloppy execution. 
-                </div>
-                <div class="text__item">
-                    Our curation is <span class="highlight">clean</span>, our process is <span class="highlight">transparent</span>. No pre-boozing. Just BYOB and live bands. We build with precision for the underground.
-                </div>
-            </div>
-        </div>
-
-        <div class="section" id="tickets">
-            <div class="header">
-                <div class="header__title">POP<br> ROC<br> KS</div>
-                <div class="header__glyph">どのように構築するか</div>
+        <div class="section">
+            
+            <div class="section-header">
+                <div class="section-title">POP<br>ROC<br>KS</div>
+                <div class="section-glyph">どのように構築するか</div>
             </div>
             
-            <div class="content">
-                <div class="tech-box">
-                    <p>>>> [ SYS.DATE ]: <span>18TH MARCH 2026</span></p>
-                    <p>>>> [ SYS.TIME ]: <span>5:00 PM ONWARDS</span></p>
-                    <p>>>> [ SYS.LOC ]: <span>THE LITTLE HOUSE, VERSOVA</span></p>
-                    <p>>>> [ SYS.RULE ]: <span style="color: var(--acid-yellow);">LIVE BANDS | BYOB</span></p>
+            <div class="section-content">
+                
+                <img src="barcode logo4.png" alt="Barcode Bombay" class="hero-logo">
+                
+                <div class="terminal-text">
+                    > SYSTEM.LOAD("<strong>POPROCKS</strong>");<br>
+                    > DATE: <strong>18TH MARCH 2026</strong><br>
+                    > TIME: <strong>5:00 PM ONWARDS</strong><br>
+                    > LOC_: <strong>THE LITTLE HOUSE, VERSOVA</strong><br><br>
+                    
+                    <span class="highlight">WARNING:</span> NO PRE-BOOZING.<br> 
+                    JUST BYOB & LIVE BANDS.
                 </div>
 
-                <div class="checkout-container">
-                    <h3>POPROCKS</h3>
-                    <p style="margin-bottom: 20px; color: var(--text-dim);">VOL 01. SECURE YOUR SPOT.</p>
-                    
+                <div class="checkout-module">
+                    <div class="checkout-header">
+                        <h2 class="checkout-title">VOL. 01</h2>
+                        <div class="checkout-subtitle">SECURE YOUR ACCESS</div>
                     </div>
+                    
+                    <div class="razorpay-wrapper">
+                        </div>
+                </div>
+
             </div>
         </div>
 
