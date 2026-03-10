@@ -76,8 +76,8 @@
 
         @media (max-width: 768px) {
             #loader-svg {
-                /* MOBILE: Shift the zoom origin further down to hit the physical center of the bottom loop */
-                transform-origin: 50% 64%; 
+                /* MOBILE: Split the difference between 55% (too high) and 64% (too low) to hit the hole perfectly */
+                transform-origin: 50% 59%; 
             }
             .loader-b-text {
                 /* MOBILE: Scale purely by width so it never overflows a narrow screen */
