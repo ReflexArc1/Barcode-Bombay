@@ -63,7 +63,7 @@
             width: 100vw;
             height: 100vh;
             /* DESKTOP (Default): Center exactly on the bottom hole using 35vh font scaling */
-            transform-origin: 50% 59%; 
+            transform-origin: 50% 59%;
             animation: introZoom 2.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
             animation-delay: 0.5s;
             will-change: transform;
@@ -71,53 +71,89 @@
 
         .loader-b-text {
             /* DESKTOP text size */
-            font-size: 35vh; 
+            font-size: 35vh;
         }
 
         @media (max-width: 768px) {
             #loader-svg {
                 /* MOBILE: Split the difference between 55% (too high) and 64% (too low) to hit the hole perfectly */
-                transform-origin: 50% 59%; 
+                transform-origin: 50% 59%;
             }
+
             .loader-b-text {
                 /* MOBILE: Scale purely by width so it never overflows a narrow screen */
-                font-size: 55vw; 
+                font-size: 55vw;
             }
         }
 
         @keyframes introZoom {
-            0% { transform: scale(1); opacity: 1; }
-            10% { transform: scale(0.95); opacity: 1; }
-            45% { opacity: 1; }            
-            75% { transform: scale(150); opacity: 0; }
-            100% { transform: scale(300); opacity: 0; }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            10% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
+
+            45% {
+                opacity: 1;
+            }
+
+            75% {
+                transform: scale(150);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(300);
+                opacity: 0;
+            }
         }
 
         @keyframes hideLoader {
-            0%, 99% { opacity: 1; visibility: visible; }
-            100% { opacity: 0; visibility: hidden; }
+
+            0%,
+            99% {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
         }
 
         /* Hero Entry Animations */
         .hero-center {
             animation: heroReveal 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             animation-delay: 2.2s;
-            opacity: 1; /* Content is visible immediately to be seen through the B hole */
+            opacity: 1;
+            /* Content is visible immediately to be seen through the B hole */
             transform: scale(0.95) translateY(20px);
         }
-        
-        nav, .hero-meta {
+
+        nav,
+        .hero-meta {
             animation: fadeUp 1.5s ease forwards;
             animation-delay: 2.5s;
-            opacity: 1; /* Content is visible immediately to be seen through the B hole */
+            opacity: 1;
+            /* Content is visible immediately to be seen through the B hole */
             transform: translateY(15px);
         }
 
         @keyframes heroReveal {
-            to { transform: scale(1) translateY(0); }
+            to {
+                transform: scale(1) translateY(0);
+            }
         }
+
         @keyframes fadeUp {
-            to { transform: translateY(0); }
+            to {
+                transform: translateY(0);
+            }
         }
 
         .noise {
@@ -641,6 +677,8 @@
             grid-template-columns: 220px 1fr 280px;
             gap: 2px;
             min-height: 250px;
+            border-radius: 6px;
+            overflow: hidden;
         }
 
         .cpn-panel {
@@ -667,7 +705,8 @@
             padding: 0;
         }
 
-        .cpn-top, .cpn-bot {
+        .cpn-top,
+        .cpn-bot {
             background: var(--bg);
             padding: 24px 32px;
             flex: 1;
@@ -691,7 +730,7 @@
             color: var(--text-muted);
             margin-bottom: 4px;
         }
-        
+
         .cpn-bot h2 {
             font-size: clamp(28px, 3.5vw, 48px);
             font-family: 'Impact', sans-serif;
@@ -704,7 +743,7 @@
             text-align: center;
             gap: 20px;
         }
-        
+
         .cpn-right .so-back {
             font-size: 38px;
             font-family: serif;
@@ -1554,7 +1593,8 @@
             }
 
             .cdown-unit {
-                padding: 16px 5px 8px; /* Tweak to visually center the font's high baseline */
+                padding: 16px 5px 8px;
+                /* Tweak to visually center the font's high baseline */
                 min-width: auto;
                 flex: 1;
             }
@@ -1642,7 +1682,8 @@
 
         /* ---------------- BRUTALIST MODE TOGGLE ---------------- */
         body.brutalist-mode {
-            --bg: #f4efeb;          /* Bleached paper */
+            --bg: #f4efeb;
+            /* Bleached paper */
             --text-main: #111111;
             --text-muted: #555555;
             --surface: #ffffff;
@@ -1658,7 +1699,8 @@
         body.brutalist-mode .hero-video,
         body.brutalist-mode .hero-vignette,
         body.brutalist-mode .hero-grid {
-            display: none !important; /* Strip cyberpunk fluff */
+            display: none !important;
+            /* Strip cyberpunk fluff */
         }
 
         body.brutalist-mode .btn {
@@ -1680,8 +1722,10 @@
             background: var(--pink);
             color: #000;
         }
-        
-        body.brutalist-mode .btn.btn-red { background: var(--surfce); }
+
+        body.brutalist-mode .btn.btn-red {
+            background: var(--surfce);
+        }
 
         body.brutalist-mode .nav-item {
             color: #111;
@@ -1698,7 +1742,7 @@
             font-weight: 900;
             color: #000;
         }
-        
+
         body.brutalist-mode .section-title em {
             color: var(--pink);
             text-shadow: 3px 3px 0 #000;
@@ -1712,10 +1756,11 @@
         body.brutalist-mode a.artist-card {
             border: 3px solid #000;
             box-shadow: 8px 8px 0 var(--blue);
-            background: #000; /* for grid gaps */
+            background: #000;
+            /* for grid gaps */
             gap: 3px;
         }
-        
+
         body.brutalist-mode hr.rule {
             border-top: 3px dashed #000;
         }
@@ -1750,7 +1795,7 @@
             font-weight: 900;
             text-shadow: none;
         }
-        
+
         body.brutalist-mode .hero-event-title,
         body.brutalist-mode .cdown-num {
             color: #fff;
@@ -1764,13 +1809,14 @@
             box-shadow: 4px 4px 0 #000;
             color: #000;
         }
-        
+
         body.brutalist-mode .marquee-wrap {
             background: var(--yellow);
             border-top: 4px solid #000;
             border-bottom: 4px solid #000;
-            transform: rotate(-1.5deg) scale(1.05); /* Paste-up look */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: rotate(-1.5deg) scale(1.05);
+            /* Paste-up look */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 100;
         }
@@ -1780,6 +1826,7 @@
         }
 
         @media (max-width: 768px) {
+
             body.brutalist-mode .hero-event-title,
             body.brutalist-mode .cdown-num {
                 /* Scale down the massive brutalist shadows on mobile so they don't break the typography */
@@ -1794,13 +1841,14 @@
             border-radius: 0;
             padding: 4px;
             transform: rotate(1deg);
-            box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
         }
-        
+
         body.brutalist-mode .coupon-grid {
             background: #000;
             gap: 4px;
             border: 4px solid #000;
+            border-radius: 0;
         }
 
         body.brutalist-mode .cpn-panel,
@@ -1809,28 +1857,97 @@
             border: none;
         }
 
-        body.brutalist-mode .cpn-left { background: var(--blue); }
-        body.brutalist-mode .cpn-left h2 { color: #fff; text-shadow: none; -webkit-text-stroke: 0; }
+        body.brutalist-mode .cpn-left {
+            background: var(--blue);
+        }
 
-        body.brutalist-mode .cpn-top { background: var(--red); }
-        body.brutalist-mode .cpn-top h2 { color: #fff; text-shadow: 3px 3px 0 #000; }
+        body.brutalist-mode .cpn-left h2 {
+            color: #fff;
+            text-shadow: none;
+            -webkit-text-stroke: 0;
+        }
 
-        body.brutalist-mode .cpn-bot { background: var(--pink); }
-        body.brutalist-mode .cpn-bot h3 { color: #fff; font-weight: 900; -webkit-text-stroke: 1px #fff; }
-        body.brutalist-mode .cpn-bot h2 { color: #fff; text-shadow: 3px 3px 0 #000; }
+        body.brutalist-mode .cpn-top {
+            background: var(--red);
+        }
 
-        body.brutalist-mode .cpn-right { background: var(--yellow); }
-        body.brutalist-mode .cpn-right .so-back { 
-            color: var(--pink); 
-            -webkit-text-stroke: 1px var(--blue); 
+        body.brutalist-mode .cpn-top h2 {
+            color: #fff;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        body.brutalist-mode .cpn-bot {
+            background: var(--pink);
+        }
+
+        body.brutalist-mode .cpn-bot h3 {
+            color: #fff;
+            font-weight: 900;
+            -webkit-text-stroke: 1px #fff;
+        }
+
+        body.brutalist-mode .cpn-bot h2 {
+            color: #fff;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        body.brutalist-mode .cpn-right {
+            background: var(--yellow);
+        }
+
+        body.brutalist-mode .cpn-right .so-back {
+            color: var(--pink);
+            -webkit-text-stroke: 1px var(--blue);
             text-shadow: 2px 2px 0 var(--blue);
             font-weight: 900;
         }
-        body.brutalist-mode .cpn-logo { filter: contrast(2) drop-shadow(4px 4px 0 #000); }
+
+        body.brutalist-mode .cpn-logo {
+            filter: contrast(2) drop-shadow(4px 4px 0 #000);
+        }
 
         @media (max-width: 900px) {
+            nav {
+                padding: 10px 15px; /* Halve the mobile padding to remove top space */
+            }
+            .nav-actions {
+                flex-direction: row; 
+                gap: 6px;
+                margin-top: 5px; /* pull buttons up tighter */
+                justify-content: center;
+                flex-wrap: nowrap; /* Force side-by-side */
+                width: 100%;
+            }
+            .nav-actions .btn {
+                padding: 8px 12px;
+                font-size: 9px;
+                letter-spacing: 1px;
+                white-space: nowrap; /* Prevent text wrapping */
+                flex: 1; /* Match widths so they sit perfectly even */
+                text-align: center;
+            }
+            .coupon-wrapper {
+                margin: 60px 20px 20px;
+            }
             .coupon-grid {
                 grid-template-columns: 1fr;
+            }
+            .cpn-left, .cpn-top, .cpn-bot, .cpn-right {
+                text-align: center;
+                align-items: center;
+            }
+            .cpn-left h2 {
+                font-size: clamp(40px, 8vw, 64px);
+                line-height: 1;
+            }
+            .cpn-top {
+                padding: 40px 20px 15px;
+            }
+            .cpn-bot {
+                padding: 15px 20px 40px;
+            }
+            .coupon-grid .so-back {
+                margin-top: 20px;
             }
         }
     </style>
@@ -1845,7 +1962,8 @@
                 <mask id="b-mask">
                     <rect width="100%" height="100%" fill="white" />
                     <!-- Using % and dy=0.35em correctly centers in iOS Safari without relying on unsupported vw attributes -->
-                    <text class="loader-b-text" x="50%" y="50%" dy="0.35em" text-anchor="middle" fill="black" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900">B</text>
+                    <text class="loader-b-text" x="50%" y="50%" dy="0.35em" text-anchor="middle" fill="black"
+                        font-family="'Impact', 'Arial Black', sans-serif" font-weight="900">B</text>
                 </mask>
             </defs>
             <rect width="100%" height="100%" fill="#050505" mask="url(#b-mask)" />
@@ -1867,16 +1985,13 @@
         <div class="hero-vignette"></div>
         <nav>
             <div class="nav-items">
+                <a class="nav-item" href="#hero">[00] HOME</a>
                 <a class="nav-item" href="#about">[01] ABOUT</a>
-                <a class="nav-item" href="#whatwedo">[02] WHAT WE DO</a>
-                <a class="nav-item" href="#pastevents">[03] WHAT WE'VE BUILT</a>
-                <a class="nav-item" href="#howwe">[04] HOW WE DO IT</a>
-                <a class="nav-item" href="#testimonials">[05] WHAT PEOPLE SAY</a>
-                <a class="nav-item" href="#tickets">[06] TICKETS</a>
+                <a class="nav-item" href="#lineup">[02] LINEUP</a>
+                <a class="nav-item" href="#tickets">[03] TICKETS</a>
             </div>
             <div class="nav-actions">
-                <button id="theme-toggle" class="btn">[ MODE ]</button>
-                <button class="btn btn-blue">TELL US ABOUT YOUR EVENT</button>
+                <button id="theme-toggle" class="btn">[ BRUTALIZE ]</button>
                 <button id="rzp-button1" class="btn btn-red rzp-ticket" data-amount="149900"
                     data-desc="Ticket — Barcode Bombay">GET TICKETS →</button>
             </div>
@@ -1963,30 +2078,31 @@
             <div class="fade-in">
                 <div class="section-label">[01] ABOUT</div>
                 <h2 class="section-title">We don't throw<br><em>parties.</em><br>We build<br>experiences.</h2>
-                <p class="about-text" style="margin-top:28px;">Barcode Bombay is Bombay's underground events collective
-                    — curating intimate, high-fidelity audio experiences in undisclosed venues across the city. No
+                <p class="about-text" style="margin-top:28px;">Established in 2026, Barcode Bombay is an unapologetic
+                    events collective dedicated entirely to supporting and amplifying Bombay's underground artists. We
+                    curate intimate, high-fidelity audio experiences in undisclosed venues across the city. No generic
                     headliners. No egos. Just sound.</p>
-                <p class="about-text" style="margin-top:14px;">Every event is designed from the ground up — from the
-                    lighting rigs to the speaker arrays — to create something that cannot be replicated anywhere else.
-                </p>
+                <p class="about-text" style="margin-top:14px;">Volume 1 marks our inception. Designed fundamentally from
+                    the ground up — from the brutalist lighting rigs to the speaker arrays — to build a foundation that
+                    puts the underground artists first.</p>
             </div>
             <div class="fade-in" style="transition-delay:0.15s;">
                 <div class="about-specs">
                     <div class="spec-cell">
-                        <div class="spec-label">EVENTS THROWN</div>
-                        <div class="spec-value red">47+</div>
+                        <div class="spec-label">CURRENT PHASE</div>
+                        <div class="spec-value red">VOL. 01</div>
                     </div>
                     <div class="spec-cell">
-                        <div class="spec-label">ARTISTS HOSTED</div>
-                        <div class="spec-value red">120+</div>
+                        <div class="spec-label">ARTIST FOCUS</div>
+                        <div class="spec-value red">UNDERGROUND</div>
                     </div>
                     <div class="spec-cell">
                         <div class="spec-label">CITIES</div>
-                        <div class="spec-value">3</div>
+                        <div class="spec-value">1</div>
                     </div>
                     <div class="spec-cell">
                         <div class="spec-label">EST.</div>
-                        <div class="spec-value">2019</div>
+                        <div class="spec-value">2026</div>
                     </div>
                     <div class="spec-cell" style="grid-column:span 2">
                         <div class="spec-label">SOUND SYSTEM</div>
@@ -1999,11 +2115,11 @@
 
     <hr class="rule">
 
-    <!-- ═══ [06] LINEUP ═══ -->
+    <!-- ═══ [02] LINEUP ═══ -->
     <section id="lineup">
         <div class="lineup-inner">
             <div class="fade-in">
-                <div class="section-label">[06] LINEUP</div>
+                <div class="section-label">[02] LINEUP</div>
                 <h2 class="section-title">The<br><em>artists.</em></h2>
             </div>
             <div class="lineup-grid fade-in" style="transition-delay:0.12s;">
@@ -2044,19 +2160,19 @@
 
     <hr class="rule">
 
-    <!-- ═══ [07] TICKETS ═══ -->
+    <!-- ═══ [03] TICKETS ═══ -->
     <section id="tickets">
         <div class="tickets-inner">
             <div class="fade-in">
-                <div class="section-label">[07] TICKETS</div>
+                <div class="section-label">[03] TICKETS</div>
                 <h2 class="section-title">Get<br><em>in.</em></h2>
             </div>
             <div class="tickets-grid">
-                <div class="ticket-card fade-in" style="transition-delay:0.08s;">
-                    <div class="ticket-stub left"></div>
-                    <div class="ticket-stub"></div>
-                    <div class="ticket-tier">TIER 01 — EARLY BIRD</div>
-                    <div class="ticket-name">ACCESS</div>
+                <div class="ticket-card featured fade-in" style="transition-delay:0.08s;">
+                    <div class="ticket-stub left" style="border-color:rgba(255,42,42,0.25)"></div>
+                    <div class="ticket-stub" style="border-color:rgba(255,42,42,0.25)"></div>
+                    <div class="ticket-tier red">TIER 01 — EARLY BIRD</div>
+                    <div class="ticket-name">PHASE 1</div>
                     <hr class="ticket-divider">
                     <div class="ticket-price"><sup>₹</sup>999</div>
                     <ul class="ticket-perks">
@@ -2064,41 +2180,38 @@
                         <li>1 complimentary drink</li>
                         <li>Limited availability</li>
                     </ul>
-                    <button class="buy-btn buy-btn-outline rzp-ticket" data-amount="99900"
-                        data-desc="Early Bird — Barcode Bombay">BUY NOW</button>
+                    <button class="buy-btn buy-btn-filled rzp-ticket" data-amount="99900"
+                        data-desc="Phase 1 — Barcode Bombay">BUY NOW</button>
                 </div>
-                <div class="ticket-card featured fade-in" style="transition-delay:0.16s;">
-                    <div class="ticket-stub left" style="border-color:rgba(255,42,42,0.25)"></div>
-                    <div class="ticket-stub" style="border-color:rgba(255,42,42,0.25)"></div>
-                    <div class="ticket-tier red">TIER 02 — MOST POPULAR</div>
-                    <div class="ticket-name">FULL ACCESS</div>
+                <div class="ticket-card fade-in" style="transition-delay:0.16s;">
+                    <div class="ticket-stub left"></div>
+                    <div class="ticket-stub"></div>
+                    <div class="ticket-tier">TIER 02 — UPCOMING</div>
+                    <div class="ticket-name">PHASE 2</div>
                     <hr class="ticket-divider">
-                    <div class="ticket-price"><sup>₹</sup>1,499</div>
+                    <div class="ticket-price" style="opacity: 0.8; letter-spacing: 4px;"><sup>₹</sup>?,???</div>
                     <ul class="ticket-perks">
                         <li>General floor access</li>
-                        <li>2 complimentary drinks</li>
-                        <li>Artist meet &amp; greet ballot</li>
-                        <li>Digital ticket collectible</li>
+                        <li>1 complimentary drink</li>
+                        <li>Limited availability</li>
                     </ul>
-                    <button class="buy-btn buy-btn-filled rzp-ticket" data-amount="149900"
-                        data-desc="Full Access — Barcode Bombay">BUY NOW</button>
+                    <button class="buy-btn buy-btn-filled" disabled
+                        style="opacity: 0.5; cursor: not-allowed; border-color: transparent;">[ UNAVAILABLE ]</button>
                 </div>
                 <div class="ticket-card fade-in" style="transition-delay:0.24s;">
                     <div class="ticket-stub left"></div>
                     <div class="ticket-stub"></div>
-                    <div class="ticket-tier">TIER 03 — VIP</div>
-                    <div class="ticket-name">INNER CIRCLE</div>
+                    <div class="ticket-tier">TIER 03 — FINAL</div>
+                    <div class="ticket-name">PHASE 3</div>
                     <hr class="ticket-divider">
-                    <div class="ticket-price"><sup>₹</sup>3,499</div>
+                    <div class="ticket-price" style="opacity: 0.3; letter-spacing: 4px;"><sup>₹</sup>?,???</div>
                     <ul class="ticket-perks">
-                        <li>VIP floor + reserved area</li>
-                        <li>Unlimited drinks</li>
-                        <li>Guaranteed meet &amp; greet</li>
-                        <li>Limited edition merch pack</li>
-                        <li>Early entry — 8PM</li>
+                        <li>General floor access</li>
+                        <li>1 complimentary drink</li>
+                        <li>Limited availability</li>
                     </ul>
-                    <button class="buy-btn buy-btn-outline rzp-ticket" data-amount="349900"
-                        data-desc="Inner Circle VIP — Barcode Bombay">BUY NOW</button>
+                    <button class="buy-btn buy-btn-outline" disabled style="opacity: 0.3; cursor: not-allowed;">[ LOCKED
+                        ]</button>
                 </div>
             </div>
         </div>
@@ -2141,8 +2254,8 @@
             requestAnimationFrame(step);
         }
         document.querySelectorAll('.nav-item, .btn').forEach(function (el) {
-            var orig = el.textContent.trim();
-            el.addEventListener('mouseenter', function () { shuffleText(el, orig, 480); });
+            el.setAttribute('data-text', el.textContent.trim());
+            el.addEventListener('mouseenter', function () { shuffleText(el, el.getAttribute('data-text'), 480); });
         });
         window.addEventListener('load', function () {
             var t = document.querySelector('.hero-event-title');
@@ -2200,16 +2313,19 @@
         document.querySelectorAll('.rzp-ticket').forEach(function (btn) {
             btn.addEventListener('click', function (e) { e.preventDefault(); openRazorpay(parseInt(btn.dataset.amount || '149900'), btn.dataset.desc || 'Ticket'); });
         });
-        
+
         // ── THEME TOGGLE ──
-        document.getElementById('theme-toggle').addEventListener('click', function() {
+        var themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', function () {
             document.body.classList.toggle('brutalist-mode');
-            
+
             // Adjust the button text based on state
-            if(document.body.classList.contains('brutalist-mode')) {
-                this.textContent = '[ CYBERPUNK ]';
+            if (document.body.classList.contains('brutalist-mode')) {
+                this.textContent = '[ MINIMALIZE ]';
+                this.setAttribute('data-text', '[ MINIMALIZE ]');
             } else {
                 this.textContent = '[ BRUTALIZE ]';
+                this.setAttribute('data-text', '[ BRUTALIZE ]');
             }
         });
     </script>
