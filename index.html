@@ -60,9 +60,8 @@
             position: absolute;
             width: 100vw;
             height: 100vh;
-            /* For an Impact 'B' centered at 50vh, the bottom loop is mathematically from 50vh to ~67.5vh. */
-            /* This makes the center of the bottom hole precisely at 58.75% height. */
-            transform-origin: 50% 59%; 
+            /* Center perfectly on the B's bottom hole using vw-scaled font */
+            transform-origin: 50% 55%; 
             animation: introZoom 2.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
             animation-delay: 0.5s;
             will-change: transform;
@@ -1530,8 +1529,8 @@
             <defs>
                 <mask id="b-mask">
                     <rect width="100vw" height="100vh" fill="white" />
-                    <!-- Centered physically. 35vh is robust for both widescreen and tall-screen scaling. -->
-                    <text x="50vw" y="50vh" text-anchor="middle" dominant-baseline="central" fill="black" font-family="'Impact', 'Arial Black', sans-serif" font-size="35vh" font-weight="900">B</text>
+                    <!-- Scaling based on width (vw) ensures the text never exceeds screen boundaries on narrow mobile devices -->
+                    <text x="50vw" y="50vh" text-anchor="middle" dominant-baseline="central" fill="black" font-family="'Impact', 'Arial Black', sans-serif" font-size="50vw" font-weight="900">B</text>
                 </mask>
             </defs>
             <rect width="100vw" height="100vh" fill="#050505" mask="url(#b-mask)" />
