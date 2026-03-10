@@ -279,6 +279,67 @@
   }
 
 }
+        /* ---------------- MOBILE OPTIMIZATION ---------------- */
+@media (max-width: 768px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  /* General container spacing */
+  section, .container, .wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Fix oversized text */
+  h1 {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 15px;
+  }
+
+  /* Images scale properly */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Prevent elements from overflowing */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Stack rows vertically */
+  .row,
+  .grid,
+  .flex {
+    flex-direction: column !important;
+    gap: 16px;
+  }
+
+  /* Buttons */
+  button, .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  /* Navigation adjustments */
+  nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+}
     </style>
 </head>
 <body>
@@ -543,5 +604,6 @@ document.querySelectorAll('.rzp-ticket').forEach(function(btn) {
 </script>
 </body>
 </html>
+
 
 
