@@ -24,7 +24,7 @@
             position: relative;
         }
 
-        /* Perspective Grid using your snippet */
+        /* Perspective Grid */
         body::before {
             content: "";
             position: fixed;
@@ -37,7 +37,6 @@
                 linear-gradient(rgba(0, 212, 255, 0.25) 1px, transparent 1px), 
                 linear-gradient(90deg, rgba(0, 212, 255, 0.25) 1px, transparent 1px);
             background-size: 40px 40px; 
-            /* Added slight perspective to mimic the "ceiling" look from your first image */
             transform: perspective(600px) rotateX(-60deg) scale(2);
             transform-origin: top;
         }
@@ -134,8 +133,20 @@
         .logo-svg {
             width: 75%;
             max-width: 1000px;
-            /* Drop shadow creates the neon glow wrapping exactly around the SVG shapes */
-            filter: drop-shadow(0 0 10px var(--primary-red)) drop-shadow(0 0 25px var(--primary-red));
+            /* Applying a pulsing neon animation */
+            animation: neon-pulse 2.5s infinite alternate;
+        }
+
+        /* Keyframes for the glowing pulse effect */
+        @keyframes neon-pulse {
+            0% {
+                filter: drop-shadow(0 0 5px var(--primary-red)) drop-shadow(0 0 15px var(--primary-red));
+                opacity: 0.9;
+            }
+            100% {
+                filter: drop-shadow(0 0 15px var(--primary-red)) drop-shadow(0 0 35px var(--primary-red)) drop-shadow(0 0 45px var(--primary-red));
+                opacity: 1;
+            }
         }
 
     </style>
@@ -181,4 +192,3 @@
 
 </body>
 </html>
-
