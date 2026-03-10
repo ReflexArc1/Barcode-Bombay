@@ -1906,46 +1906,265 @@
             filter: contrast(2) drop-shadow(4px 4px 0 #000);
         }
 
+        /* ─── MIC VIZ COMPONENT ─── */
+        .mic-viz-wrapper {
+            position: relative;
+            max-width: 1000px;
+            height: 180px;
+            margin: 60px auto 20px;
+            perspective: 800px;
+            /* Gives nice depth on shatter */
+        }
+
+        .mic-viz-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(77, 136, 255, 0.3);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            border-radius: 6px;
+            overflow: hidden;
+            padding: 0 10px;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .mic-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10;
+            transition: opacity 0.5s;
+            backdrop-filter: blur(4px);
+        }
+
+        .mic-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .barcode-bars {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            gap: 2px;
+        }
+
+        .barc-bar {
+            flex: 1;
+            background: var(--text-main);
+            height: 2%;
+            transition: height 0.05s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        body.brutalist-mode .mic-viz-container {
+            border: 4px solid #000;
+            background: var(--blue);
+            box-shadow: 10px 10px 0 #000;
+            border-radius: 0;
+        }
+
+        body.brutalist-mode .barc-bar {
+            background: var(--yellow);
+            box-shadow: none;
+            border: 1px solid #000;
+            border-bottom: none;
+        }
+
+        body.brutalist-mode .mic-overlay {
+            background: rgba(255, 235, 51, 0.9);
+        }
+
+        body.brutalist-mode .mic-overlay p {
+            color: #000;
+            font-weight: 900;
+        }
+
+        /* SHATTER EFFECT */
+        @keyframes crack-shake {
+            0% {
+                transform: translate(calc(var(--shake-x, 1) * 1px), calc(var(--shake-y, 1) * 1px)) rotate(calc(var(--shake-r, 1) * 0.5deg));
+            }
+
+            25% {
+                transform: translate(calc(var(--shake-x, -1) * 2px), calc(var(--shake-y, -1) * 2px)) rotate(calc(var(--shake-r, -1) * 0.5deg));
+            }
+
+            50% {
+                transform: translate(calc(var(--shake-x, -2) * 1px), calc(var(--shake-y, 1) * 2px)) rotate(calc(var(--shake-r, 1) * 1deg));
+            }
+
+            75% {
+                transform: translate(calc(var(--shake-x, 2) * 2px), calc(var(--shake-y, -2) * 1px)) rotate(calc(var(--shake-r, -1) * 1deg));
+            }
+
+            100% {
+                transform: translate(calc(var(--shake-x, -1) * 1px), calc(var(--shake-y, 2) * 2px)) rotate(calc(var(--shake-r, 0) * 0deg));
+            }
+        }
+
+        .mic-viz-container.shaking {
+            animation: crack-shake 0.1s infinite;
+            /* Intensity driven by JS */
+            --shake-x: var(--intensity, 0);
+            --shake-y: var(--intensity, 0);
+            --shake-r: var(--intensity, 0);
+            /* Add red stress coloring as it shakes louder */
+            box-shadow: 0 0 calc(var(--intensity, 0) * 15px) rgba(255, 42, 42, 0.8) inset;
+        }
+
+        /* The Broken State */
+        .mic-viz-container.shattered {
+            background: rgba(255, 42, 42, 0.1) !important;
+            border: 4px dashed var(--red) !important;
+            box-shadow: 0 0 50px rgba(255, 42, 42, 0.5) inset;
+        }
+
+        /* Fragment 1: Left piece */
+        .mic-viz-wrapper.shattered .shard-1 {
+            clip-path: polygon(0 0, 38% 0, 48% 30%, 28% 60%, 42% 100%, 0 100%);
+            transform: translate(-10px, -6px) rotate(-2deg);
+        }
+
+        /* Fragment 2: Middle piece */
+        .mic-viz-wrapper.shattered .shard-2 {
+            clip-path: polygon(38% 0, 72% 0, 62% 45%, 78% 100%, 42% 100%, 28% 60%, 48% 30%);
+            transform: translate(0px, 12px) rotate(1deg);
+        }
+
+        /* Fragment 3: Right piece */
+        .mic-viz-wrapper.shattered .shard-3 {
+            clip-path: polygon(72% 0, 100% 0, 100% 100%, 78% 100%, 62% 45%);
+            transform: translate(14px, -4px) rotate(3deg);
+        }
+
+        @keyframes pitch-flash {
+            0% {
+                box-shadow: 0 0 50px rgba(255, 255, 255, 0.8) inset;
+            }
+
+            100% {
+                box-shadow: 0 0 0 transparent inset;
+            }
+        }
+
+        .mic-viz-wrapper.pitch-flash {
+            animation: pitch-flash 0.3s ease-out;
+        }
+
+        .hover-reward-msg {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px) rotate(2deg);
+            background: var(--yellow);
+            color: #000;
+            padding: 10px 20px;
+            border: 3px solid #000;
+            font-weight: 900;
+            font-size: 14px;
+            letter-spacing: 2px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            z-index: 50;
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .pitch-sequence-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--yellow);
+            font-size: clamp(24px, 5vw, 42px);
+            font-weight: 900;
+            letter-spacing: 15px;
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0.9;
+            text-shadow: 4px 4px 0 #000;
+            white-space: nowrap;
+        }
+
+        .mic-viz-wrapper.shattered:hover .hover-reward-msg {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) rotate(-1deg);
+        }
+
         @media (max-width: 900px) {
             nav {
-                padding: 10px 15px; /* Halve the mobile padding to remove top space */
+                padding: 10px 15px;
+                /* Halve the mobile padding to remove top space */
             }
+
             .nav-actions {
-                flex-direction: row; 
+                flex-direction: row;
                 gap: 6px;
-                margin-top: 5px; /* pull buttons up tighter */
+                margin-top: 5px;
+                /* pull buttons up tighter */
                 justify-content: center;
-                flex-wrap: nowrap; /* Force side-by-side */
+                flex-wrap: nowrap;
+                /* Force side-by-side */
                 width: 100%;
             }
+
             .nav-actions .btn {
                 padding: 8px 12px;
                 font-size: 9px;
                 letter-spacing: 1px;
-                white-space: nowrap; /* Prevent text wrapping */
-                flex: 1; /* Match widths so they sit perfectly even */
+                white-space: nowrap;
+                /* Prevent text wrapping */
+                flex: 1;
+                /* Match widths so they sit perfectly even */
                 text-align: center;
             }
+
             .coupon-wrapper {
                 margin: 60px 20px 20px;
             }
+
             .coupon-grid {
                 grid-template-columns: 1fr;
             }
-            .cpn-left, .cpn-top, .cpn-bot, .cpn-right {
+
+            .cpn-left,
+            .cpn-top,
+            .cpn-bot,
+            .cpn-right {
                 text-align: center;
                 align-items: center;
             }
+
             .cpn-left h2 {
                 font-size: clamp(40px, 8vw, 64px);
                 line-height: 1;
             }
+
             .cpn-top {
                 padding: 40px 20px 15px;
             }
+
             .cpn-bot {
                 padding: 15px 20px 40px;
             }
+
             .coupon-grid .so-back {
                 margin-top: 20px;
             }
@@ -1989,6 +2208,7 @@
                 <a class="nav-item" href="#about">[01] ABOUT</a>
                 <a class="nav-item" href="#lineup">[02] LINEUP</a>
                 <a class="nav-item" href="#tickets">[03] TICKETS</a>
+                <a class="nav-item" href="#calibration">[04] CALIBRATION</a>
             </div>
             <div class="nav-actions">
                 <button id="theme-toggle" class="btn">[ BRUTALIZE ]</button>
@@ -2005,10 +2225,9 @@
             <div class="hero-date">BOMBAY &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; VENUE TBA</div>
         </div>
         <div class="hero-meta">
-            <div class="meta-block"><span>PN: BBC-001-X &nbsp;·&nbsp; SN: 994321-K</span><span>DO NOT REMOVE DURING
-                    OPERATION</span></div>
-            <div class="meta-block" style="text-align:right"><span>BATCH: 2026-B1 &nbsp;·&nbsp; TOL:
-                    ±0.000BPM</span><span>MAT: SOUND // LIGHT // BASS</span></div>
+            <div class="meta-block"><span>EST. BOMBAY 2026 &nbsp;·&nbsp; INITIATIVE: VOLUME 01</span></div>
+            <div class="meta-block" style="text-align:right"><span>FOCUS: BOMBAY UNDERGROUND &nbsp;·&nbsp; NO
+                    HEADLINERS</span><span>MAT: SOUND // LIGHT // BASS</span></div>
         </div>
         <div class="scroll-hint">SCROLL</div>
     </section>
@@ -2217,12 +2436,36 @@
         </div>
     </section>
 
+    <hr class="rule">
+
+    <!-- ═══ [04] CALIBRATION ═══ -->
+    <section id="calibration">
+        <div class="lineup-inner" style="text-align: center; max-width: 1300px; margin: 0 auto; padding: 0 20px;">
+            <div class="fade-in">
+                <div class="section-label">[04] SYSTEM CALIBRATION</div>
+                <h2 class="section-title">Test Your<br><em>Levels.</em></h2>
+            </div>
+            <div id="mic-viz-wrapper" class="mic-viz-wrapper fade-in" style="transition-delay:0.12s;">
+                <div id="mic-viz-container" class="mic-viz-container">
+                    <div id="mic-overlay" class="mic-overlay">
+                        <button class="btn btn-blue" id="btn-mic-start">[ INITIATE AUDIO UPLINK ]</button>
+                        <p style="margin-top: 15px; font-size: 10px; letter-spacing: 2px; color: var(--text-muted);">
+                            MAKE NOISE TO SHATTER THE SYSTEM.</p>
+                    </div>
+                    <div id="barcode-bars" class="barcode-bars"></div>
+                </div>
+                <div id="hover-reward-msg" class="hover-reward-msg">SYSTEM SHATTERED</div>
+                <div id="pitch-sequence-display" class="pitch-sequence-display"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- ═══ FOOTER ═══ -->
     <footer id="contact">
         <div class="footer-left">
             <span style="display:block;opacity:0.8;margin-bottom:5px;">BARCODE BOMBAY</span>
-            <span style="display:block;">PN: BBC-001-X · SN: 994321-K</span>
-            <span style="display:block;">BATCH: 2026-B1 · INDIA</span>
+            <span style="display:block;">EST. BOMBAY 2026 · INITIATIVE: VOLUME 01</span>
+            <span style="display:block;">FOCUS: UNDERGROUND · INDIA</span>
             <span style="display:block;margin-top:10px;">© 2026 BARCODE BOMBAY.</span>
         </div>
         <img src="barcode logo4.svg" alt="Barcode" class="footer-logo">
@@ -2313,6 +2556,193 @@
         document.querySelectorAll('.rzp-ticket').forEach(function (btn) {
             btn.addEventListener('click', function (e) { e.preventDefault(); openRazorpay(parseInt(btn.dataset.amount || '149900'), btn.dataset.desc || 'Ticket'); });
         });
+
+        // ── MIC AUDIO VIZ ──
+        const btnMic = document.getElementById('btn-mic-start');
+        const micOverlay = document.getElementById('mic-overlay');
+        const vizWrapper = document.getElementById('mic-viz-wrapper');
+        const vizContainer = document.getElementById('mic-viz-container');
+        const barsContainer = document.getElementById('barcode-bars');
+        const numBars = 48; // A good number for a barcode look
+        let audioContext, analyser, dataArray;
+        let isVolumeAwake = false;
+        let isShattered = false;
+        let noteSequence = [];
+        let currentNoteFreq = 0;
+        let stableFrames = 0;
+        let lastNoteTime = 0;
+        const solfege = ['DO', 'RE', 'MI', 'FA', 'SO', 'LA', 'TI', 'DO'];
+        const pitchDisplay = document.getElementById('pitch-sequence-display');
+
+        // Generate the barcode divs
+        for (let i = 0; i < numBars; i++) {
+            let bar = document.createElement('div');
+            bar.className = 'barc-bar';
+            barsContainer.appendChild(bar);
+        }
+        let visualizerBars = document.querySelectorAll('.barc-bar');
+
+        btnMic.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                micOverlay.classList.add('hidden');
+
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 2048; // High resolution for pitch detection
+                const source = audioContext.createMediaStreamSource(stream);
+                source.connect(analyser);
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                renderAudioVisualizer();
+            } catch (err) {
+                alert("Microphone connection failed. Ensure permissions are granted.");
+            }
+        });
+
+        function renderAudioVisualizer() {
+            requestAnimationFrame(renderAudioVisualizer);
+            analyser.getByteFrequencyData(dataArray);
+
+            let totalAverage = 0;
+            // Map the 1024 bins into 48 visualizer bars smoothly
+            const step = Math.floor((dataArray.length / 2) / numBars); // Analyze bottom frequencies
+
+            for (let i = 0; i < numBars; i++) {
+                let binStart = i * step;
+                let chunkMax = 0;
+                for (let j = 0; j < step; j++) {
+                    if (dataArray[binStart + j] > chunkMax) chunkMax = dataArray[binStart + j];
+                }
+
+                totalAverage += chunkMax;
+                let heightPercent = Math.max(2, (chunkMax / 255) * 100);
+                visualizerBars[i].style.height = heightPercent + '%';
+
+                // If broken into 3 clones, smoothly update the clones as well!
+                if (isShattered) {
+                    if (visualizerBars[i + numBars]) visualizerBars[i + numBars].style.height = heightPercent + '%';
+                    if (visualizerBars[i + (numBars * 2)]) visualizerBars[i + (numBars * 2)].style.height = heightPercent + '%';
+                }
+            }
+
+            let avgVol = totalAverage / numBars;
+
+            // --- PITCH DETECTION (DO RE MI FA SO LA TI DO) ---
+            if (!isShattered) {
+                let overallMax = 0;
+                for (let i = 0; i < dataArray.length / 2; i++) {
+                    if (dataArray[i] > overallMax) overallMax = dataArray[i];
+                }
+
+                if (overallMax > 100) { // Enough volume to sing clearly
+                    let threshold = overallMax * 0.85;
+                    let peakBin = 2; // skip DC offset at bin 0-1
+                    for (let i = 2; i < dataArray.length / 2; i++) {
+                        if (dataArray[i] >= threshold) {
+                            peakBin = i;
+                            break; // Get the lowest strong fundamental frequency
+                        }
+                    }
+                    let peakFreq = peakBin * audioContext.sampleRate / analyser.fftSize;
+
+                    if (currentNoteFreq === 0 || Math.abs(peakFreq - currentNoteFreq) / currentNoteFreq > 0.08) {
+                        currentNoteFreq = peakFreq;
+                        stableFrames = 1;
+                    } else {
+                        stableFrames++;
+                    }
+
+                    if (stableFrames === 15) { // sustained note detected (~240ms)
+                        if (noteSequence.length === 0) {
+                            noteSequence.push(currentNoteFreq);
+                            lastNoteTime = Date.now();
+                            pitchDisplay.textContent = solfege[0];
+                        } else {
+                            let lastNote = noteSequence[noteSequence.length - 1];
+                            // Note must be ascending
+                            if (currentNoteFreq > lastNote * 1.05 && currentNoteFreq < lastNote * 1.8) {
+                                noteSequence.push(currentNoteFreq);
+                                lastNoteTime = Date.now();
+
+                                // Flash success indicator
+                                vizWrapper.classList.remove('pitch-flash');
+                                void vizWrapper.offsetWidth; // trigger HTML reflow
+                                vizWrapper.classList.add('pitch-flash');
+
+                                pitchDisplay.textContent = solfege.slice(0, noteSequence.length).join(' ');
+
+                                if (noteSequence.length >= 8) {
+                                    triggerShatter("PERFECT PITCH · REWARD: VOCAL26");
+                                    noteSequence = [];
+                                    pitchDisplay.textContent = '';
+                                }
+                            } else if (currentNoteFreq < lastNote * 0.95) {
+                                noteSequence = [currentNoteFreq]; // Reset if pitch drops
+                                lastNoteTime = Date.now();
+                                pitchDisplay.textContent = solfege[0];
+                            }
+                        }
+                    }
+                } else {
+                    stableFrames = 0;
+                    if (Date.now() - lastNoteTime > 2000) {
+                        noteSequence = []; // Reset sequence after 2s of silence
+                        pitchDisplay.textContent = '';
+                    }
+                }
+            }
+
+            // --- DAMAGE SHAKE ---
+            if (avgVol > 90 && !isShattered) {
+                vizWrapper.classList.add('shaking'); // Shake the wrapper
+                let intensity = Math.min(10, ((avgVol - 90) / 90) * 10);
+                vizWrapper.style.setProperty('--intensity', intensity);
+            } else if (!isShattered) {
+                vizWrapper.classList.remove('shaking');
+                vizWrapper.style.setProperty('--intensity', 0);
+            }
+
+            // --- VOLUME SHATTER (HARDER) ---
+            if (avgVol > 170 && !isVolumeAwake && !isShattered) {
+                triggerShatter("SYSTEM SHATTERED");
+            }
+        }
+
+        function triggerShatter(rewardText) {
+            isVolumeAwake = true;
+            isShattered = true;
+            pitchDisplay.textContent = '';
+
+            document.getElementById('hover-reward-msg').textContent = rewardText;
+
+            // 1. Shatter the wrapper and container
+            vizWrapper.classList.remove('shaking');
+            vizWrapper.classList.remove('pitch-flash');
+            vizWrapper.classList.add('shattered');
+            vizContainer.classList.add('shattered', 'shard-1');
+
+            // 2. Clone the container into two new shattered fragments
+            let shard2 = vizContainer.cloneNode(true);
+            let shard3 = vizContainer.cloneNode(true);
+
+            shard2.id = "mic-viz-shard-2";
+            shard3.id = "mic-viz-shard-3";
+            shard2.classList.replace('shard-1', 'shard-2');
+            shard3.classList.replace('shard-1', 'shard-3');
+
+            vizWrapper.appendChild(shard2);
+            vizWrapper.appendChild(shard3);
+
+            // 3. Update the global bars object so the live audio updates all pieces!
+            visualizerBars = document.querySelectorAll('.barc-bar');
+
+            // 4. Switch to brutalist mode for the entire site!
+            const isBrutal = document.body.classList.contains('brutalist-mode');
+            if (!isBrutal) {
+                document.getElementById('theme-toggle').click();
+            }
+        }
 
         // ── THEME TOGGLE ──
         var themeToggle = document.getElementById('theme-toggle');
