@@ -59,7 +59,7 @@
         .scan-line { position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),rgba(255,42,42,0.6),var(--red),transparent);box-shadow:0 0 8px var(--red),0 0 20px rgba(255,42,42,0.4);animation:scan 3.5s linear infinite;pointer-events:none;z-index:6; }
         .scan-line::before { content:'';position:absolute;top:-20px;bottom:-20px;left:0;right:0;background:linear-gradient(180deg,transparent,rgba(255,42,42,0.04),transparent); }
         @keyframes scan { 0% { top:0%;opacity:0; } 5% { opacity:1; } 95% { opacity:1; } 100% { top:100%;opacity:0; } }
-        .hero-event-title { font-family:'Ticketing',monospace;font-size:clamp(20px,4vw,52px);letter-spacing:0.35em;color:var(--red);margin-top:10px;text-align:center; }
+        .hero-event-title { font-family:'Ticketing',monospace;font-size:clamp(20px,4vw,52px);letter-spacing:0.35em;margin-right:-0.35em;color:var(--red);margin-top:10px;text-align:center; }
         .hero-date { font-size:11px;letter-spacing:4px;margin-top:14px;text-align:center;color:var(--blue); }
         .hero-meta { position:relative;z-index:10;display:flex;justify-content:space-between;padding:0 48px 36px; }
         .meta-block { font-size:9px;letter-spacing:2px;line-height:1.9;color:var(--blue); }
@@ -604,6 +604,7 @@ document.querySelectorAll('.rzp-ticket').forEach(function(btn) {
 </script>
 </body>
 </html>
+
 
 
 
