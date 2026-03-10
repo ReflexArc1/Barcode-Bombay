@@ -60,22 +60,21 @@
             position: absolute;
             width: 100vw;
             height: 100vh;
-            /* Center the zoom exactly on the bottom curve/hole of the 'B' */
-            transform-origin: 50% 64%; 
+            /* Zoom directly into the absolute center of the SVG on all devices */
+            transform-origin: center; 
             animation: introZoom 2.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
             animation-delay: 0.5s;
             will-change: transform;
         }
         
-        @media (max-width: 768px) {
-            #loader-svg { transform-origin: 50% 59%; }
-        }
+        /* Removed all media-query transform-origin hacks since the hole is now perfectly centered in the SVG coordinate space */
 
         @keyframes introZoom {
             0% { transform: scale(1); opacity: 1; }
             10% { transform: scale(0.95); opacity: 1; }
-            85% { opacity: 1; }
-            100% { transform: scale(400); opacity: 0; }
+            50% { opacity: 1; }
+            80% { transform: scale(150); opacity: 0; }
+            100% { transform: scale(300); opacity: 0; }
         }
 
         @keyframes hideLoader {
@@ -1531,8 +1530,8 @@
             <defs>
                 <mask id="b-mask">
                     <rect width="100%" height="100%" fill="white" />
-                    <!-- Impact/Arial Black standardizes rendering universally, preventing FOUT invisible text bugs inside SVG masks -->
-                    <text x="50%" y="54%" text-anchor="middle" dominant-baseline="central" fill="black" font-family="'Impact', 'Arial Black', sans-serif" font-size="600px" font-weight="900">B</text>
+                    <!-- Made the B a little smaller visually, and shifted its position up and left so the actual physical bottom-loop hole lands dead-center in the 1000x1000 viewport. -->
+                    <text x="47%" y="42%" text-anchor="middle" dominant-baseline="central" fill="black" font-family="'Impact', 'Arial Black', sans-serif" font-size="450px" font-weight="900">B</text>
                 </mask>
             </defs>
             <rect width="100%" height="100%" fill="#050505" mask="url(#b-mask)" />
