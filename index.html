@@ -76,8 +76,8 @@
 
         @media (max-width: 768px) {
             #loader-svg {
-                /* MOBILE: Adjust zoom origin slightly for mobile screens */
-                transform-origin: 50% 55%; 
+                /* MOBILE: Shift the zoom origin further down to hit the physical center of the bottom loop */
+                transform-origin: 50% 64%; 
             }
             .loader-b-text {
                 /* MOBILE: Scale purely by width so it never overflows a narrow screen */
