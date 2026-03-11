@@ -3760,19 +3760,18 @@
 
   modal.style.display = "none";
 
-  // CREATE ORDER FROM APPS SCRIPT
-  const orderRes = await fetch(
-  SCRIPT_URL + "?action=createOrder",
-  {
+  // CREATE ORDER
+  const orderRes = await fetch(SCRIPT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ email: email })
-  }
-);
+  });
 
   const order = await orderRes.json();
+
+  console.log("ORDER:", order);
 
   var options = {
     key: "rzp_live_SQ5kMTnIikhsdj",
@@ -3782,7 +3781,6 @@
 
     name: "Barcode Bombay",
     description: selectedDesc,
-    image: "barcode logo4.svg",
 
     prefill: {
       email: email
@@ -3799,6 +3797,7 @@
 
   var rzp = new Razorpay(options);
   rzp.open();
+
 };
 
         });
@@ -3819,6 +3818,7 @@
 </body>
 
 </html>
+
 
 
 
