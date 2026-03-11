@@ -1815,12 +1815,24 @@
         body.brutalist-mode .artist-card,
         body.brutalist-mode .ticket-card {
             border: none;
-            background: #fff;
+            background: #fff !important;
             color: #000;
         }
 
         body.brutalist-mode .headliner-card {
             background: var(--pink);
+        }
+
+        body.brutalist-mode .lineup-grid .artist-card:last-child {
+            background: var(--pink) !important;
+            color: #fff !important;
+        }
+
+        body.brutalist-mode .lineup-grid .artist-card:last-child .artist-num,
+        body.brutalist-mode .lineup-grid .artist-card:last-child .artist-name,
+        body.brutalist-mode .lineup-grid .artist-card:last-child .artist-genre {
+            color: #fff !important;
+            opacity: 1 !important;
         }
 
         body.brutalist-mode .ticket-card {
@@ -3427,7 +3439,8 @@
                         mouse.lastY = e.touches[0].clientY;
                     });
 
-                    ['mousedown', 'touchstart'].forEach(evt => window.addEventListener(evt, () => mouse.isDown = true));
+                    ['mousedown'].forEach(evt => window.addEventListener(evt, () => mouse.isDown = true));
+                    window.addEventListener('touchstart', (e) => { if (e.target !== pwdInput) mouse.isDown = true; });
                     ['mouseup', 'mouseleave', 'touchend'].forEach(evt => window.addEventListener(evt, () => {
                         mouse.isDown = false;
                         mouse.x = null;
@@ -3437,7 +3450,7 @@
                     }));
 
                     const triggerExplosion = (x, y) => {
-                        pwdInput.focus();
+                        // No focus call here — only the input field itself should open the keyboard
                         particles.forEach(p => {
                             let dx = p.x - x;
                             let dy = p.y - y;
@@ -3458,7 +3471,8 @@
                     });
 
                     window.addEventListener('touchstart', (e) => {
-                        if (e.target !== pwdInput) {
+                        // Only explode when touching the canvas, NOT the input or password container
+                        if (e.target === pwdBgCanvas) {
                             triggerExplosion(e.touches[0].clientX, e.touches[0].clientY);
                         }
                     });
