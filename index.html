@@ -2479,6 +2479,8 @@
             align-items: center;
             justify-content: center;
             transition: opacity 0.8s ease;
+            overflow: hidden;       /* prevent page scroll showing through */
+            touch-action: none;     /* disable browser scroll on overlay */
         }
 
         #password-overlay-bg {
@@ -3431,23 +3433,45 @@
                     });
 
                     window.addEventListener('touchmove', (e) => {
+                        if (e.target === pwdInput) return;
+                        e.preventDefault(); // prevent page scroll behind overlay
+                        const dx = e.touches[0].clientX - touchStartX;
+                        const dy = e.touches[0].clientY - touchStartY;
+                        if (Math.sqrt(dx*dx + dy*dy) > 10) touchMoved = true; // mark as drag
                         mouse.vx = e.touches[0].clientX - mouse.lastX;
                         mouse.vy = e.touches[0].clientY - mouse.lastY;
                         mouse.x = e.touches[0].clientX;
                         mouse.y = e.touches[0].clientY;
                         mouse.lastX = e.touches[0].clientX;
                         mouse.lastY = e.touches[0].clientY;
+                    }, { passive: false }); // passive:false needed for preventDefault
+
+                    // Track touch start so we can tell tap apart from drag
+                    let touchStartX = 0, touchStartY = 0, touchMoved = false;
+
+                    window.addEventListener('touchstart', (e) => {
+                        if (e.target === pwdInput) return; // let the input do its own thing
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                        touchMoved = false;
+                        mouse.isDown = true;
+                        mouse.lastX = touchStartX;
+                        mouse.lastY = touchStartY;
                     });
 
-                    ['mousedown'].forEach(evt => window.addEventListener(evt, () => mouse.isDown = true));
-                    window.addEventListener('touchstart', (e) => { if (e.target !== pwdInput) mouse.isDown = true; });
-                    ['mouseup', 'mouseleave', 'touchend'].forEach(evt => window.addEventListener(evt, () => {
+                    window.addEventListener('touchend', (e) => {
+                        if (e.target === pwdInput) return;
+                        // Only explode if user barely moved (i.e. it was a tap, not a drag)
+                        if (!touchMoved) {
+                            triggerExplosion(touchStartX, touchStartY);
+                        }
                         mouse.isDown = false;
                         mouse.x = null;
                         mouse.y = null;
                         mouse.vx = 0;
                         mouse.vy = 0;
-                    }));
+                        touchMoved = false;
+                    });
 
                     const triggerExplosion = (x, y) => {
                         // No focus call here — only the input field itself should open the keyboard
@@ -3463,6 +3487,15 @@
                         });
                     };
 
+                    window.addEventListener('mousedown', () => mouse.isDown = true);
+                    ['mouseup', 'mouseleave'].forEach(evt => window.addEventListener(evt, () => {
+                        mouse.isDown = false;
+                        mouse.x = null;
+                        mouse.y = null;
+                        mouse.vx = 0;
+                        mouse.vy = 0;
+                    }));
+
                     window.addEventListener('click', (e) => {
                         // Ignore input clicks
                         if (e.target !== pwdInput) {
@@ -3470,12 +3503,7 @@
                         }
                     });
 
-                    window.addEventListener('touchstart', (e) => {
-                        // Only explode when touching the canvas, NOT the input or password container
-                        if (e.target === pwdBgCanvas) {
-                            triggerExplosion(e.touches[0].clientX, e.touches[0].clientY);
-                        }
-                    });
+                    // touchstart explosion is now handled above via tap detection
 
                     function initCanvas() {
                         width = window.innerWidth;
