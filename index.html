@@ -3123,9 +3123,7 @@
 
         // ── RAZORPAY ──
 
-        document.querySelectorAll('.rzp-ticket').forEach(function (btn) {
-            btn.addEventListener('click', function (e) { e.preventDefault(); openRazorpay(parseInt(btn.dataset.amount || '149900'), btn.dataset.desc || 'Ticket'); });
-        });
+       
 
         // ── 3D TICKET MODAL ──
         var ticketBtn = document.getElementById('floating-ticket-btn');
@@ -3826,6 +3824,7 @@
 </body>
 
 </html>
+
 
 
 
