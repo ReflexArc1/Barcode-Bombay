@@ -6,49 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARCODE BOMBAY</title>
     <style>
-	.ticket-email-modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.8);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:99999;
-}
+        .ticket-email-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
 
-.ticket-email-box{
-background:#050505;
-border:2px solid #ff3333;
-padding:30px;
-width:320px;
-text-align:center;
-font-family:monospace;
-}
+        .ticket-email-box {
+            background: #050505;
+            border: 2px solid #ff3333;
+            padding: 30px;
+            width: 320px;
+            text-align: center;
+            font-family: monospace;
+        }
 
-.ticket-email-box h3{
-color:#ff3333;
-margin-bottom:10px;
-}
+        .ticket-email-box h3 {
+            color: #ff3333;
+            margin-bottom: 10px;
+        }
 
-.ticket-email-box input{
-width:100%;
-padding:10px;
-margin-top:10px;
-background:black;
-border:1px solid #ff3333;
-color:white;
-}
+        .ticket-email-box input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: black;
+            border: 1px solid #ff3333;
+            color: white;
+        }
 
-.ticket-email-box button{
-margin-top:15px;
-width:100%;
-padding:12px;
-background:#ff3333;
-border:none;
-color:black;
-font-weight:bold;
-cursor:pointer;
-}
+        .ticket-email-box button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 12px;
+            background: #ff3333;
+            border: none;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         @font-face {
             font-family: 'Ticketing';
             src: url("ticketing (1).woff2") format("woff2");
@@ -2451,10 +2452,202 @@ cursor:pointer;
             color: #000;
             transform: scale(1.02);
         }
+
+        /* ─── PASSWORD PAGE ─── */
+        body.locked *:not(#password-overlay-bg) {
+            animation-play-state: paused !important;
+        }
+
+        #password-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999999;
+            background: #030303;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+
+        #password-overlay-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.35;
+        }
+
+        #password-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, #030303 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+
+        #password-overlay.unlocked {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .password-container {
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .target-box {
+            position: relative;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
+            transition: transform 0.1s;
+        }
+
+        .t-corner {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-color: var(--red);
+            border-style: solid;
+            transition: all 0.3s ease;
+        }
+
+        .t-corner.tl {
+            top: 0;
+            left: 0;
+            border-width: 2px 0 0 2px;
+        }
+
+        .t-corner.tr {
+            top: 0;
+            right: 0;
+            border-width: 2px 2px 0 0;
+        }
+
+        .t-corner.bl {
+            bottom: 0;
+            left: 0;
+            border-width: 0 0 2px 2px;
+        }
+
+        .t-corner.br {
+            bottom: 0;
+            right: 0;
+            border-width: 0 2px 2px 0;
+        }
+
+        .target-box:focus-within .t-corner {
+            width: 20px;
+            height: 20px;
+            border-color: var(--blue);
+            box-shadow: 0 0 10px rgba(77, 136, 255, 0.5);
+        }
+
+        .target-box:focus-within {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        #site-password {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-family: 'Ticketing', monospace;
+            font-size: 28px;
+            letter-spacing: 8px;
+            text-align: center;
+            outline: none;
+            width: 240px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+        }
+
+        #site-password::placeholder {
+            color: rgba(255, 51, 51, 0.5);
+            letter-spacing: 4px;
+            font-size: 16px;
+            text-shadow: none;
+        }
+
+        .pwd-status {
+            font-family: 'SF Mono', monospace;
+            color: var(--red);
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(255, 51, 51, 0.6);
+            height: 14px;
+        }
+
+        .pwd-status.error {
+            color: #fff;
+            background: var(--red);
+            padding: 2px 10px;
+            text-shadow: none;
+            animation: glitch-anim 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite alternate;
+        }
+
+        .pwd-status.granted {
+            color: #000;
+            background: var(--blue);
+            padding: 2px 10px;
+            font-weight: bold;
+            text-shadow: none;
+            box-shadow: 0 0 15px var(--blue);
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                transform: translate(0)
+            }
+
+            20% {
+                transform: translate(-2px, 1px)
+            }
+
+            40% {
+                transform: translate(-1px, -1px)
+            }
+
+            60% {
+                transform: translate(2px, 1px)
+            }
+
+            80% {
+                transform: translate(1px, -1px)
+            }
+
+            100% {
+                transform: translate(0)
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- ═══ PASSWORD OVERLAY ═══ -->
+    <div id="password-overlay">
+        <canvas id="password-overlay-bg"></canvas>
+        <div class="password-container">
+            <div id="pwd-status" class="pwd-status">[ SYSTEM LOCKED ]</div>
+            <div class="target-box">
+                <div class="t-corner tl"></div>
+                <div class="t-corner tr"></div>
+                <div class="t-corner bl"></div>
+                <div class="t-corner br"></div>
+                <input type="password" id="site-password" placeholder="INPUT" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="pwd-status" style="opacity: 0.5; letter-spacing: 2px;">PRESS ENTER TO VERIFY</div>
+        </div>
+    </div>
 
     <!-- ═══ INTRO LOADER ═══ -->
     <div id="intro-wrapper">
@@ -2494,8 +2687,7 @@ cursor:pointer;
             </div>
             <div class="nav-actions">
                 <button id="theme-toggle" class="btn">[ BRUTALIZE ]</button>
-                <button id="rzp-button1" class="btn btn-red rzp-ticket" data-amount="149900"
-                    data-desc="Ticket — Barcode Bombay">GET TICKETS →</button>
+                <a href="#tickets" class="btn btn-red" style="text-decoration: none;">GET TICKETS →</a>
             </div>
         </nav>
         <div class="hero-center">
@@ -2640,7 +2832,7 @@ cursor:pointer;
                     <div class="artist-genre">ANNOUNCEMENT SOON</div>
                 </div>
             </div>
-            
+
         </div>
     </section>
 
@@ -2916,7 +3108,7 @@ cursor:pointer;
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeEgg(); });
 
         // ── RAZORPAY ──
-        
+
         document.querySelectorAll('.rzp-ticket').forEach(function (btn) {
             btn.addEventListener('click', function (e) { e.preventDefault(); openRazorpay(parseInt(btn.dataset.amount || '149900'), btn.dataset.desc || 'Ticket'); });
         });
@@ -3181,137 +3373,392 @@ cursor:pointer;
                 this.setAttribute('data-text', '[ BRUTALIZE ]');
             }
         });
+
+        // ── PASSWORD PROTECTION ──
+        const pwdInput = document.getElementById('site-password');
+        const pwdOverlay = document.getElementById('password-overlay');
+        const pwdStatus = document.getElementById('pwd-status');
+
+        if (pwdInput && pwdOverlay) {
+
+            // Generate interactive canvas matrix rain
+            const pwdBgCanvas = document.getElementById('password-overlay-bg');
+            let rainAnimFrame; // store animation frame ID
+
+            if (sessionStorage.getItem('barcodeUnlocked') === 'true') {
+                pwdOverlay.style.display = 'none';
+                document.body.classList.remove('locked');
+            } else {
+                document.body.classList.add('locked'); // ensure locked class
+                pwdInput.focus();
+
+                // Clicking anywhere refocuses the input
+                pwdOverlay.addEventListener('click', (e) => {
+                    if (e.target === pwdOverlay || e.target.classList.contains('password-container')) {
+                        pwdInput.focus()
+                    }
+                });
+
+                if (pwdBgCanvas) {
+                    const ctx = pwdBgCanvas.getContext('2d');
+                    let width, height;
+                    const letters = 'BARCODEBOMBAYVOL01!@#$%^&*()_+{}[]|0123456789'.split('');
+                    const fontSize = 16;
+                    let particles = [];
+
+                    // Mouse interaction
+                    let mouse = { x: null, y: null, radius: 150, isDown: false, vx: 0, vy: 0, lastX: 0, lastY: 0 };
+
+                    window.addEventListener('mousemove', (e) => {
+                        mouse.vx = e.clientX - mouse.lastX;
+                        mouse.vy = e.clientY - mouse.lastY;
+                        mouse.x = e.clientX;
+                        mouse.y = e.clientY;
+                        mouse.lastX = e.clientX;
+                        mouse.lastY = e.clientY;
+                    });
+
+                    window.addEventListener('touchmove', (e) => {
+                        mouse.vx = e.touches[0].clientX - mouse.lastX;
+                        mouse.vy = e.touches[0].clientY - mouse.lastY;
+                        mouse.x = e.touches[0].clientX;
+                        mouse.y = e.touches[0].clientY;
+                        mouse.lastX = e.touches[0].clientX;
+                        mouse.lastY = e.touches[0].clientY;
+                    });
+
+                    ['mousedown', 'touchstart'].forEach(evt => window.addEventListener(evt, () => mouse.isDown = true));
+                    ['mouseup', 'mouseleave', 'touchend'].forEach(evt => window.addEventListener(evt, () => {
+                        mouse.isDown = false;
+                        mouse.x = null;
+                        mouse.y = null;
+                        mouse.vx = 0;
+                        mouse.vy = 0;
+                    }));
+
+                    const triggerExplosion = (x, y) => {
+                        pwdInput.focus();
+                        particles.forEach(p => {
+                            let dx = p.x - x;
+                            let dy = p.y - y;
+                            let dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist < 300) {
+                                let force = (300 - dist) / 300;
+                                p.vx += (dx / dist) * force * 50;
+                                p.vy += (dy / dist) * force * 50 - 10; // Extra upward boost
+                            }
+                        });
+                    };
+
+                    window.addEventListener('click', (e) => {
+                        // Ignore input clicks
+                        if (e.target !== pwdInput) {
+                            triggerExplosion(e.clientX, e.clientY);
+                        }
+                    });
+
+                    window.addEventListener('touchstart', (e) => {
+                        if (e.target !== pwdInput) {
+                            triggerExplosion(e.touches[0].clientX, e.touches[0].clientY);
+                        }
+                    });
+
+                    function initCanvas() {
+                        width = window.innerWidth;
+                        height = window.innerHeight;
+                        pwdBgCanvas.width = width;
+                        pwdBgCanvas.height = height;
+
+                        let numParticles = Math.floor((width * height) / 3500); // density
+                        if (numParticles > 1000) numParticles = 1000; // Cap performance
+
+                        particles = [];
+                        for (let i = 0; i < numParticles; i++) {
+                            particles.push({
+                                x: Math.random() * width,
+                                y: Math.random() * -height * 2, // Start high above
+                                vx: 0,
+                                vy: Math.random() * 2 + 1, // Base speed (slowed down)
+                                char: letters[Math.floor(Math.random() * letters.length)],
+                                color: (Math.random() > 0.95) ? '#ffffff' : '#ff3333',
+                                size: fontSize
+                            });
+                        }
+                    }
+
+                    initCanvas();
+                    window.addEventListener('resize', initCanvas);
+
+                    function drawRain() {
+                        // Clear background with slight trail
+                        ctx.fillStyle = 'rgba(3, 3, 3, 0.2)';
+                        ctx.fillRect(0, 0, width, height);
+
+                        ctx.font = fontSize + 'px "SF Mono", monospace';
+
+                        for (let i = 0; i < particles.length; i++) {
+                            let p = particles[i];
+
+                            // Physics Update (Gravity)
+                            p.vy += 0.08;
+
+                            // Drag Interaction
+                            if (mouse.x && mouse.y) {
+                                let dx = p.x - mouse.x;
+                                let dy = p.y - mouse.y;
+                                let dist = Math.sqrt(dx * dx + dy * dy);
+
+                                if (dist < mouse.radius) {
+                                    if (mouse.isDown) {
+                                        // Swipe drag (apply mouse momentum)
+                                        p.vx += mouse.vx * 0.15;
+                                        p.vy += mouse.vy * 0.15;
+                                        p.color = '#4d88ff'; // Glow blue when grabbed
+                                    } else {
+                                        // Gentle hover repel
+                                        let force = (mouse.radius - dist) / mouse.radius;
+                                        p.vx += (dx / dist) * force * 1.5;
+                                        p.vy += (dy / dist) * force * 1.5;
+                                        if (p.color === '#ff3333') p.color = '#ff6666'; // Highlight red
+                                    }
+                                }
+                            }
+
+                            // Friction / Air Resistance
+                            p.vx *= 0.96;
+                            p.vy *= 0.99;
+
+                            // Terminal velocity
+                            if (p.vy > 20) p.vy *= 0.95;
+
+                            p.x += p.vx;
+                            p.y += p.vy;
+
+                            // Floor Collision
+                            if (p.y >= height - p.size) {
+                                p.y = height - p.size;
+                                p.vy *= -0.4; // Bounce
+                                p.vx *= 0.8;  // Ground friction
+
+                                // To prevent piling up infinitely and stopping the rain, 
+                                // randomly respawn grounded particles back to the top
+                                if (Math.random() > 0.98 || Math.abs(p.vx) < 0.1 && Math.abs(p.vy) < 0.1 && Math.random() > 0.85) {
+                                    p.y = -50;
+                                    p.x = Math.random() * width;
+                                    p.vy = Math.random() * 2 + 1;
+                                    p.vx = 0;
+                                    p.char = letters[Math.floor(Math.random() * letters.length)];
+                                    p.color = (Math.random() > 0.95) ? '#ffffff' : '#ff3333';
+                                }
+                            }
+
+                            // Wall Collisions
+                            if (p.x < 0) { p.x = 0; p.vx *= -0.5; }
+                            if (p.x > width) { p.x = width; p.vx *= -0.5; }
+
+                            // Draw Particle
+                            ctx.fillStyle = p.color;
+                            ctx.shadowBlur = (p.color !== '#ff3333') ? 10 : 0;
+                            ctx.shadowColor = p.color;
+                            ctx.fillText(p.char, p.x, p.y);
+                            ctx.shadowBlur = 0;
+
+                            // Randomly glitch character sometimes if moving fast
+                            if (Math.abs(p.vx) + Math.abs(p.vy) > 5 && Math.random() > 0.8) {
+                                p.char = letters[Math.floor(Math.random() * letters.length)];
+                            }
+
+                            // Cool down color back to red slowly
+                            if (p.color !== '#ff3333' && p.color !== '#ffffff' && Math.random() > 0.95) {
+                                p.color = '#ff3333';
+                            }
+                        }
+
+                        rainAnimFrame = requestAnimationFrame(drawRain);
+                    }
+
+                    drawRain();
+                }
+
+                pwdInput.addEventListener('keydown', (e) => {
+                    // Reset errors when typing begins again
+                    if (pwdStatus.classList.contains('error')) {
+                        pwdStatus.classList.remove('error');
+                        pwdStatus.textContent = '[ SYSTEM LOCKED ]';
+                    }
+
+                    if (e.key === 'Enter') {
+                        const val = e.target.value.toLowerCase().trim();
+                        if (val === 'eternal1') {
+                            // SUCCESS
+                            pwdStatus.classList.remove('error');
+                            pwdStatus.classList.add('granted');
+                            pwdStatus.textContent = 'ACCESS GRANTED';
+                            pwdInput.blur();
+
+                            sessionStorage.setItem('barcodeUnlocked', 'true');
+
+                            // Stop Animation
+                            if (rainAnimFrame) cancelAnimationFrame(rainAnimFrame);
+
+                            // Let the 'granted' blink for half a second before unlocking
+                            setTimeout(() => {
+                                document.body.classList.remove('locked');
+                                pwdOverlay.classList.add('unlocked');
+                                setTimeout(() => {
+                                    pwdOverlay.style.display = 'none';
+                                }, 800);
+                            }, 500);
+
+                        } else {
+                            // ERROR
+                            pwdStatus.classList.add('error');
+                            pwdStatus.textContent = 'ACCESS DENIED';
+                            pwdInput.value = '';
+
+                            // Visual shake effect on the box
+                            const box = document.querySelector('.target-box');
+                            box.style.transform = 'translateX(-10px)';
+                            setTimeout(() => box.style.transform = 'translateX(10px)', 50);
+                            setTimeout(() => box.style.transform = 'translateX(-10px)', 100);
+                            setTimeout(() => box.style.transform = 'translateX(10px)', 150);
+                            setTimeout(() => box.style.transform = 'translateX(0)', 200);
+                        }
+                    }
+                });
+            }
+        }
     </script>
-	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-	<script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
-const btn = document.getElementById("phase0-btn");
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
+        const btn = document.getElementById("phase0-btn");
 
-async function checkTickets() {
+        async function checkTickets() {
 
-  try {
+            try {
 
-    const res = await fetch(SCRIPT_URL);
-    const data = await res.json();
+                const res = await fetch(SCRIPT_URL);
+                const data = await res.json();
 
-    if (data.sold_out) {
+                if (data.sold_out) {
 
-      btn.innerText = "SOLD OUT";
-      btn.disabled = true;
-      btn.style.opacity = "0.5";
-      btn.style.cursor = "not-allowed";
+                    btn.innerText = "SOLD OUT";
+                    btn.disabled = true;
+                    btn.style.opacity = "0.5";
+                    btn.style.cursor = "not-allowed";
 
-    } else {
+                } else {
 
-      const left = data.total - data.sold;
-      btn.innerText = "BUY NOW (" + left + " LEFT)";
+                    const left = data.total - data.sold;
+                    btn.innerText = "BUY NOW (" + left + " LEFT)";
 
-    }
+                }
 
-  } catch (err) {
+            } catch (err) {
 
-    console.log("Ticket API error:", err);
+                console.log("Ticket API error:", err);
 
-  }
+            }
 
-}
+        }
 
-// check on page load
-checkTickets();
+        // check on page load
+        checkTickets();
 
-// optional: refresh every 15 seconds
-setInterval(checkTickets, 15000);
+        // optional: refresh every 15 seconds
+        setInterval(checkTickets, 15000);
 
-</script>
-	<script>
+    </script>
+    <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
 
-let selectedAmount = 0;
-let selectedDesc = "";
+            let selectedAmount = 0;
+            let selectedDesc = "";
 
-const modal = document.getElementById("email-modal");
-const emailInput = document.getElementById("ticket-email");
-const continueBtn = document.getElementById("continue-payment");
+            const modal = document.getElementById("email-modal");
+            const emailInput = document.getElementById("ticket-email");
+            const continueBtn = document.getElementById("continue-payment");
 
-// BUY BUTTON CLICK
-document.querySelectorAll(".rzp-ticket").forEach(button => {
+            // BUY BUTTON CLICK
+            document.querySelectorAll(".rzp-ticket").forEach(button => {
 
-  button.addEventListener("click", async function () {
+                button.addEventListener("click", async function () {
 
-    const res = await fetch(SCRIPT_URL);
-    const data = await res.json();
+                    const res = await fetch(SCRIPT_URL);
+                    const data = await res.json();
 
-    if (data.sold_out) {
-      alert("Tickets are sold out.");
-      return;
-    }
+                    if (data.sold_out) {
+                        alert("Tickets are sold out.");
+                        return;
+                    }
 
-    selectedAmount = this.dataset.amount;
-    selectedDesc = this.dataset.desc;
+                    selectedAmount = this.dataset.amount;
+                    selectedDesc = this.dataset.desc;
 
-    modal.style.display = "flex";
+                    modal.style.display = "flex";
 
-  });
+                });
 
-});
+            });
 
-// CONTINUE BUTTON
-continueBtn.onclick = function () {
+            // CONTINUE BUTTON
+            continueBtn.onclick = function () {
 
-  const email = emailInput.value;
+                const email = emailInput.value;
 
-  if (!email) {
-    alert("Please enter your email");
-    return;
-  }
+                if (!email) {
+                    alert("Please enter your email");
+                    return;
+                }
 
-  modal.style.display = "none";
+                modal.style.display = "none";
 
-  var options = {
-    key: "rzp_live_RAp4IcVab7QxLH",
-    amount: selectedAmount,
-    currency: "INR",
-    name: "Barcode Bombay",
-    description: selectedDesc,
-    image: "barcode logo4.svg",
+                var options = {
+                    key: "rzp_live_RAp4IcVab7QxLH",
+                    amount: selectedAmount,
+                    currency: "INR",
+                    name: "Barcode Bombay",
+                    description: selectedDesc,
+                    image: "barcode logo4.svg",
 
-    prefill: {
-      email: email
-    },
+                    prefill: {
+                        email: email
+                    },
 
-    notes: {
-      ticket_email: email
-    },
+                    notes: {
+                        ticket_email: email
+                    },
 
-    theme: {
-      color: "#ff3333"
-    }
-  };
+                    theme: {
+                        color: "#ff3333"
+                    }
+                };
 
-  var rzp = new Razorpay(options);
-  rzp.open();
+                var rzp = new Razorpay(options);
+                rzp.open();
 
-};
+            };
 
-});
+        });
 
-</script>
-<div id="email-modal" class="ticket-email-modal">
-  <div class="ticket-email-box">
+    </script>
+    <div id="email-modal" class="ticket-email-modal">
+        <div class="ticket-email-box">
 
-    <h3>ENTER EMAIL</h3>
-    <p>Your ticket will be sent here</p>
+            <h3>ENTER EMAIL</h3>
+            <p>Your ticket will be sent here</p>
 
-    <input id="ticket-email" type="email" placeholder="email@example.com">
+            <input id="ticket-email" type="email" placeholder="email@example.com">
 
-    <button id="continue-payment">CONTINUE</button>
+            <button id="continue-payment">CONTINUE</button>
 
-  </div>
-</div>
+        </div>
+    </div>
 </body>
 
 </html>
