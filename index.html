@@ -1067,7 +1067,7 @@
 
         .lineup-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1px;
             margin-top: 50px;
             background: rgba(255, 51, 51, 0.2);
@@ -2182,12 +2182,12 @@
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
             animation: floating-swivel 6s infinite cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0px 15px 20px rgba(0,0,0,0.6));
+            filter: drop-shadow(0px 15px 20px rgba(0, 0, 0, 0.6));
         }
 
         #floating-ticket-btn:hover {
             transform: scale(1.15) translateY(-10px) rotateY(15deg) rotateX(10deg);
-            filter: drop-shadow(0px 25px 35px rgba(255,42,42,0.4));
+            filter: drop-shadow(0px 25px 35px rgba(255, 42, 42, 0.4));
             animation-play-state: paused;
         }
 
@@ -2200,9 +2200,17 @@
         }
 
         @keyframes floating-swivel {
-            0% { transform: translateY(0px) rotateY(-15deg) rotateX(10deg) rotateZ(-3deg); }
-            50% { transform: translateY(-20px) rotateY(15deg) rotateX(-5deg) rotateZ(3deg); }
-            100% { transform: translateY(0px) rotateY(-15deg) rotateX(10deg) rotateZ(-3deg); }
+            0% {
+                transform: translateY(0px) rotateY(-15deg) rotateX(10deg) rotateZ(-3deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotateY(15deg) rotateX(-5deg) rotateZ(3deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotateY(-15deg) rotateX(10deg) rotateZ(-3deg);
+            }
         }
 
         #ticket-modal {
@@ -2256,7 +2264,7 @@
             border-radius: 4px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             /* Handle image proportions so it doesn't get too tall on desktop */
-            max-height: 85vh; 
+            max-height: 85vh;
             display: flex;
             justify-content: center;
         }
@@ -2273,7 +2281,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, transparent 60%);
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
             opacity: 0;
             pointer-events: none;
             mix-blend-mode: overlay;
@@ -2283,43 +2291,50 @@
         .ticket-3d-wrapper:hover .ticket-glare {
             opacity: 1;
         }
-        
+
         @media (max-width: 768px) {
             #floating-ticket-btn {
                 bottom: 20px;
                 right: 20px;
                 width: 90px;
             }
+
             .ticket-modal-close {
                 top: 20px;
                 right: auto;
                 left: 50%;
                 transform: translateX(-50%);
             }
+
             .ticket-modal-content {
                 width: 90vw;
             }
-            
+
             .ticket-3d-wrapper img {
                 max-height: 45vh !important;
             }
+
             .ticket-modal-info {
                 padding: 12px 15px !important;
                 max-width: 85vw !important;
                 gap: 10px !important;
             }
+
             .ticket-modal-info h3 {
                 font-size: 18px !important;
                 margin-bottom: 2px !important;
             }
+
             .ticket-modal-info p {
                 font-size: 12px !important;
                 margin-bottom: 8px !important;
             }
+
             .ticket-modal-info .price {
                 font-size: 24px !important;
                 margin-bottom: 12px !important;
             }
+
             .ticket-modal-buy-btn {
                 padding: 10px 20px !important;
                 font-size: 14px !important;
@@ -2450,7 +2465,7 @@
         </div>
         <div class="hero-meta">
             <div class="meta-block"><span>EST. BOMBAY 2026 &nbsp;·&nbsp; INITIATIVE: VOLUME 01</span></div>
-            <div class="meta-block" style="text-align:right"><span>FOCUS: BOMBAY UNDERGROUND &nbsp;·&nbsp; NO
+            <div class="meta-block" style="text-align:right"><span>FOCUS: BOMBAY COMMUNITY &nbsp;·&nbsp; NO
                     HEADLINERS</span><span>MAT: SOUND // LIGHT // BASS</span></div>
         </div>
         <div class="scroll-hint">SCROLL</div>
@@ -2568,33 +2583,13 @@
             <div class="lineup-grid fade-in" style="transition-delay:0.12s;">
                 <div class="artist-card">
                     <div class="artist-num">[01]</div>
-                    <div class="artist-name">TBA</div>
-                    <div class="artist-genre">TECHNO // INDUSTRIAL</div>
-                    <div class="artist-time">22:00 — 00:00</div>
+                    <div class="artist-name">SPARE KEYS</div>
+                    <div class="artist-genre">ROCK</div>
                 </div>
                 <div class="artist-card">
                     <div class="artist-num">[02]</div>
-                    <div class="artist-name">TBA</div>
-                    <div class="artist-genre">AMBIENT // DRONE</div>
-                    <div class="artist-time">00:00 — 02:00</div>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-num">[03]</div>
-                    <div class="artist-name">TBA</div>
-                    <div class="artist-genre">EBM // DARK ELECTRO</div>
-                    <div class="artist-time">02:00 — 04:00</div>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-num">[04]</div>
-                    <div class="artist-name">TBA</div>
-                    <div class="artist-genre">NOISE // EXPERIMENTAL</div>
-                    <div class="artist-time">20:00 — 22:00</div>
-                </div>
-                <div class="artist-card headliner-card">
-                    <div class="artist-num">[HEADLINER]</div>
-                    <div class="artist-name" style="font-size:clamp(24px,3.5vw,42px);">CLASSIFIED</div>
-                    <div class="artist-genre">ANNOUNCEMENT SOON</div>
-                    <div class="artist-time">04:00 — CLOSE</div>
+                    <div class="artist-name">ACCOUNTANTS FOR LAWYERS</div>
+                    <div class="artist-genre">INDIE POP</div>
                 </div>
             </div>
             <p class="section-label" style="margin-top:20px;">* FULL LINEUP REVEALED AT TICKET PURCHASE</p>
@@ -2617,10 +2612,9 @@
                     <div class="ticket-tier red">TIER 01 — EARLY BIRD</div>
                     <div class="ticket-name">PHASE 1</div>
                     <hr class="ticket-divider">
-                    <div class="ticket-price"><sup>₹</sup>999</div>
+                    <div class="ticket-price"><sup>₹</sup>600</div>
                     <ul class="ticket-perks">
                         <li>General floor access</li>
-                        <li>complimentary POPROCKS</li>
                         <li>Limited availability</li>
                     </ul>
                     <button class="buy-btn buy-btn-filled rzp-ticket" data-amount="99900"
@@ -2635,7 +2629,6 @@
                     <div class="ticket-price" style="opacity: 0.8; letter-spacing: 4px;"><sup>₹</sup>?,???</div>
                     <ul class="ticket-perks">
                         <li>General floor access</li>
-                        <li>1 complimentary drink</li>
                         <li>Limited availability</li>
                     </ul>
                     <button class="buy-btn buy-btn-filled" disabled
@@ -2650,7 +2643,6 @@
                     <div class="ticket-price" style="opacity: 0.3; letter-spacing: 4px;"><sup>₹</sup>?,???</div>
                     <ul class="ticket-perks">
                         <li>General floor access</li>
-                        <li>1 complimentary drink</li>
                         <li>Limited availability</li>
                     </ul>
                     <button class="buy-btn buy-btn-outline" disabled style="opacity: 0.3; cursor: not-allowed;">[ LOCKED
@@ -2713,12 +2705,13 @@
                 <img src="phase1-ticket.png" alt="Phase 1 Ticket">
                 <div class="ticket-glare" id="ticket-glare"></div>
             </div>
-            
+
             <div class="ticket-modal-info" id="ticket-modal-info">
                 <h3>PHASE 1 ACCESS</h3>
-                <p>Limited availability. General floor access + complimentary POPROCKS.</p>
-                <div class="price"><sup>₹</sup>999</div>
-                <button class="ticket-modal-buy-btn rzp-ticket" data-amount="99900" data-desc="Phase 1 Ticket — Barcode Bombay">INITIATE PURCHASE</button>
+                <p>Limited availability. General floor access</p>
+                <div class="price"><sup>₹</sup>600</div>
+                <button class="ticket-modal-buy-btn rzp-ticket" data-amount="99900"
+                    data-desc="Phase 1 Ticket — Barcode Bombay">INITIATE PURCHASE</button>
             </div>
         </div>
     </div>
@@ -2765,25 +2758,25 @@
         var ticketGlare = document.getElementById('ticket-glare');
         var ticketModalInfo = document.getElementById('ticket-modal-info');
 
-        ticketBtn.addEventListener('click', function() {
+        ticketBtn.addEventListener('click', function () {
             ticketModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
+
             // Pop-in animation
             ticket3D.style.transform = 'scale(0.9)';
-            
-            if(ticketModalInfo) {
+
+            if (ticketModalInfo) {
                 ticketModalInfo.style.animation = 'none';
                 ticketModalInfo.offsetHeight; // trigger reflow
                 ticketModalInfo.style.animation = 'info-slide-up 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.2s';
             }
 
-            setTimeout(function() { 
-                ticket3D.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; 
-                ticket3D.style.transform = 'scale(1)'; 
+            setTimeout(function () {
+                ticket3D.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                ticket3D.style.transform = 'scale(1)';
             }, 10);
-            setTimeout(function() { 
-                ticket3D.style.transition = 'transform 0.1s ease-out'; 
+            setTimeout(function () {
+                ticket3D.style.transition = 'transform 0.1s ease-out';
             }, 450);
         });
 
@@ -2793,34 +2786,34 @@
         }
 
         closeTicketBtn.addEventListener('click', closeTicket);
-        ticketModal.addEventListener('click', function(e) {
+        ticketModal.addEventListener('click', function (e) {
             if (e.target === ticketModal) closeTicket();
         });
 
-        ticket3D.addEventListener('mousemove', function(e) {
+        ticket3D.addEventListener('mousemove', function (e) {
             var rect = ticket3D.getBoundingClientRect();
             var x = e.clientX - rect.left;
             var y = e.clientY - rect.top;
-            
+
             var centerX = rect.width / 2;
             var centerY = rect.height / 2;
-            
+
             var rotateX = ((y - centerY) / centerY) * -15; // max 15 deg
             var rotateY = ((x - centerX) / centerX) * 15;
-            
+
             ticket3D.style.transform = 'perspective(1200px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
-            
+
             var glareX = (x / rect.width) * 100;
             var glareY = (y / rect.height) * 100;
             ticketGlare.style.background = 'radial-gradient(circle at ' + glareX + '% ' + glareY + '%, rgba(255,255,255,0.4) 0%, transparent 60%)';
         });
 
-        ticket3D.addEventListener('mouseleave', function() {
+        ticket3D.addEventListener('mouseleave', function () {
             ticket3D.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
             ticketGlare.style.opacity = '0';
         });
 
-        ticket3D.addEventListener('mouseenter', function() {
+        ticket3D.addEventListener('mouseenter', function () {
             ticketGlare.style.opacity = '1';
         });
 
@@ -2877,18 +2870,18 @@
         var ticket3D = document.getElementById('ticket-3d');
         var ticketGlare = document.getElementById('ticket-glare');
 
-        ticketBtn.addEventListener('click', function() {
+        ticketBtn.addEventListener('click', function () {
             ticketModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
+
             // Pop-in animation
             ticket3D.style.transform = 'scale(0.9)';
-            setTimeout(function() { 
-                ticket3D.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; 
-                ticket3D.style.transform = 'scale(1)'; 
+            setTimeout(function () {
+                ticket3D.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                ticket3D.style.transform = 'scale(1)';
             }, 10);
-            setTimeout(function() { 
-                ticket3D.style.transition = 'transform 0.1s ease-out'; 
+            setTimeout(function () {
+                ticket3D.style.transition = 'transform 0.1s ease-out';
             }, 450);
         });
 
@@ -2898,34 +2891,34 @@
         }
 
         closeTicketBtn.addEventListener('click', closeTicket);
-        ticketModal.addEventListener('click', function(e) {
+        ticketModal.addEventListener('click', function (e) {
             if (e.target === ticketModal) closeTicket();
         });
 
-        ticket3D.addEventListener('mousemove', function(e) {
+        ticket3D.addEventListener('mousemove', function (e) {
             var rect = ticket3D.getBoundingClientRect();
             var x = e.clientX - rect.left;
             var y = e.clientY - rect.top;
-            
+
             var centerX = rect.width / 2;
             var centerY = rect.height / 2;
-            
+
             var rotateX = ((y - centerY) / centerY) * -15; // max 15 deg
             var rotateY = ((x - centerX) / centerX) * 15;
-            
+
             ticket3D.style.transform = 'perspective(1200px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
-            
+
             var glareX = (x / rect.width) * 100;
             var glareY = (y / rect.height) * 100;
             ticketGlare.style.background = 'radial-gradient(circle at ' + glareX + '% ' + glareY + '%, rgba(255,255,255,0.4) 0%, transparent 60%)';
         });
 
-        ticket3D.addEventListener('mouseleave', function() {
+        ticket3D.addEventListener('mouseleave', function () {
             ticket3D.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
             ticketGlare.style.opacity = '0';
         });
 
-        ticket3D.addEventListener('mouseenter', function() {
+        ticket3D.addEventListener('mouseenter', function () {
             ticketGlare.style.opacity = '1';
         });
 
