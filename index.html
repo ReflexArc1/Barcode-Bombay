@@ -2292,8 +2292,85 @@
             }
             .ticket-modal-close {
                 top: 20px;
-                right: 20px;
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
             }
+            .ticket-modal-content {
+                width: 90vw;
+            }
+            
+            .ticket-3d-wrapper img {
+                max-height: 50vh;
+            }
+        }
+
+        /* ─── TICKET MODAL INFO SECTION ─── */
+        .ticket-modal-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .ticket-modal-info {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: info-slide-up 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes info-slide-up {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ticket-modal-info h3 {
+            font-family: 'Ticketing', monospace;
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--red);
+        }
+
+        .ticket-modal-info p {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .ticket-modal-info .price {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .ticket-modal-buy-btn {
+            background: var(--red);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-family: 'SF Mono', monospace;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .ticket-modal-buy-btn:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.02);
         }
     </style>
 </head>
@@ -2610,9 +2687,18 @@
 
     <div id="ticket-modal">
         <button class="ticket-modal-close" id="close-ticket-btn">CLOSE [X]</button>
-        <div class="ticket-3d-wrapper" id="ticket-3d">
-            <img src="phase1-ticket.png" alt="Phase 1 Ticket">
-            <div class="ticket-glare" id="ticket-glare"></div>
+        <div class="ticket-modal-content">
+            <div class="ticket-3d-wrapper" id="ticket-3d">
+                <img src="phase1-ticket.png" alt="Phase 1 Ticket">
+                <div class="ticket-glare" id="ticket-glare"></div>
+            </div>
+            
+            <div class="ticket-modal-info" id="ticket-modal-info">
+                <h3>PHASE 1 ACCESS</h3>
+                <p>Limited availability. General floor access + complimentary POPROCKS.</p>
+                <div class="price"><sup>₹</sup>999</div>
+                <button class="ticket-modal-buy-btn rzp-ticket" data-amount="99900" data-desc="Phase 1 Ticket — Barcode Bombay">INITIATE PURCHASE</button>
+            </div>
         </div>
     </div>
 
@@ -2656,6 +2742,7 @@
         var closeTicketBtn = document.getElementById('close-ticket-btn');
         var ticket3D = document.getElementById('ticket-3d');
         var ticketGlare = document.getElementById('ticket-glare');
+        var ticketModalInfo = document.getElementById('ticket-modal-info');
 
         ticketBtn.addEventListener('click', function() {
             ticketModal.classList.add('active');
@@ -2663,6 +2750,13 @@
             
             // Pop-in animation
             ticket3D.style.transform = 'scale(0.9)';
+            
+            if(ticketModalInfo) {
+                ticketModalInfo.style.animation = 'none';
+                ticketModalInfo.offsetHeight; // trigger reflow
+                ticketModalInfo.style.animation = 'info-slide-up 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.2s';
+            }
+
             setTimeout(function() { 
                 ticket3D.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; 
                 ticket3D.style.transform = 'scale(1)'; 
