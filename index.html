@@ -3712,101 +3712,78 @@
 
     </script>
     <script>
+    document.addEventListener("DOMContentLoaded", function () {
 
-        document.addEventListener("DOMContentLoaded", function () {
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
 
-            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
+        let selectedAmount = 0;
+        let selectedDesc = "";
 
-            let selectedAmount = 0;
-            let selectedDesc = "";
+        const modal = document.getElementById("email-modal");
+        const emailInput = document.getElementById("ticket-email");
+        const continueBtn = document.getElementById("continue-payment");
 
-            const modal = document.getElementById("email-modal");
-            const emailInput = document.getElementById("ticket-email");
-            const continueBtn = document.getElementById("continue-payment");
+        // BUY BUTTON CLICK
+        document.querySelectorAll(".rzp-ticket").forEach(button => {
+            button.addEventListener("click", async function () {
+                const res = await fetch(SCRIPT_URL);
+                const data = await res.json();
 
-            // BUY BUTTON CLICK
-            document.querySelectorAll(".rzp-ticket").forEach(button => {
+                if (data.sold_out) {
+                    alert("Tickets are sold out.");
+                    return;
+                }
 
-                button.addEventListener("click", async function () {
-
-                    const res = await fetch(SCRIPT_URL);
-                    const data = await res.json();
-
-                    if (data.sold_out) {
-                        alert("Tickets are sold out.");
-                        return;
-                    }
-
-                    selectedAmount = this.dataset.amount;
-                    selectedDesc = this.dataset.desc;
-
-                    modal.style.display = "flex";
-
-                });
-
+                selectedAmount = this.dataset.amount;
+                selectedDesc = this.dataset.desc;
+                modal.style.display = "flex";
             });
-
-            // CONTINUE BUTTON
-            continueBtn.onclick = async function () {
-
-  const email = emailInput.value;
-
-  if (!email) {
-    alert("Please enter your email");
-    return;
-  }
-
-  modal.style.display = "none";
-
-  // CREATE ORDER
-  const orderRes = await fetch(SCRIPT_URL, {
-  method: "POST",
-  // ✅ No Content-Type header — GAS accepts this without CORS preflight
-  body: JSON.stringify({ email: email })
-});
-
-  const order = await orderRes.json();
-
-  console.log("ORDER:", order);
-
-  var options = {
-  key: "rzp_live_SQ5kMTnIikhsdj",
-  amount: order.amount,
-  currency: order.currency,
-  order_id: order.id,
-
-  name: "Barcode Bombay",
-  description: selectedDesc,
-
-  prefill: { email: email },
-  notes: { ticket_email: email },
-  theme: { color: "#ff3333" },
-
-  // ✅ THIS IS THE KEY ADDITION
-  handler: async function (response) {
-    // Payment authorized — now tell your script to capture it and send the ticket
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "capture",
-        payment_id: response.razorpay_payment_id,
-        order_id: response.razorpay_order_id,
-        email: email,
-        amount: order.amount
-      })
-    });
-  }
-};
-
-  var rzp = new Razorpay(options);
-  rzp.open();
-
-};
-
         });
 
-    </script>
+        // CONTINUE BUTTON
+        continueBtn.onclick = async function () {
+            const email = emailInput.value;
+            if (!email) { alert("Please enter your email"); return; }
+
+            modal.style.display = "none";
+
+            try {
+                // ✅ NO Content-Type header — fixes CORS
+                const orderRes = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ email: email })
+                });
+
+                const order = await orderRes.json();
+                console.log("ORDER:", order);
+
+                if (!order.id) {
+                    alert("Order creation failed: " + JSON.stringify(order));
+                    return;
+                }
+
+                var options = {
+                    key: "rzp_live_SQ5kMTnIikhsdj",
+                    amount: order.amount,
+                    currency: order.currency,
+                    order_id: order.id,
+                    name: "Barcode Bombay",
+                    description: selectedDesc,
+                    prefill: { email: email },
+                    notes: { ticket_email: email },
+                    theme: { color: "#ff3333" }
+                };
+
+                var rzp = new Razorpay(options);
+                rzp.open();
+
+            } catch (err) {
+                console.error("Payment error:", err);
+                alert("Something went wrong: " + err.message);
+            }
+        };
+    });
+</script>
     <div id="email-modal" class="ticket-email-modal">
         <div class="ticket-email-box">
 
@@ -3822,6 +3799,7 @@
 </body>
 
 </html>
+
 
 
 
