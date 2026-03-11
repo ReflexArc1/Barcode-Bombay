@@ -3749,42 +3749,54 @@
             });
 
             // CONTINUE BUTTON
-            continueBtn.onclick = function () {
+            continueBtn.onclick = async function () {
 
-                const email = emailInput.value;
+  const email = emailInput.value;
 
-                if (!email) {
-                    alert("Please enter your email");
-                    return;
-                }
+  if (!email) {
+    alert("Please enter your email");
+    return;
+  }
 
-                modal.style.display = "none";
+  modal.style.display = "none";
 
-                var options = {
-                    key: "rzp_live_RAp4IcVab7QxLH",
-                    amount: selectedAmount,
-                    currency: "INR",
-                    name: "Barcode Bombay",
-                    description: selectedDesc,
-                    image: "barcode logo4.svg",
+  // CREATE ORDER FROM APPS SCRIPT
+  const orderRes = await fetch(
+    SCRIPT_URL + "?action=createOrder",
+    {
+      method: "POST",
+      body: JSON.stringify({ email: email })
+    }
+  );
 
-                    prefill: {
-                        email: email
-                    },
+  const order = await orderRes.json();
 
-                    notes: {
-                        ticket_email: email
-                    },
+  var options = {
+    key: "rzp_live_SQ5kMTnIikhsdj",
+    amount: order.amount,
+    currency: order.currency,
+    order_id: order.id,
 
-                    theme: {
-                        color: "#ff3333"
-                    }
-                };
+    name: "Barcode Bombay",
+    description: selectedDesc,
+    image: "barcode logo4.svg",
 
-                var rzp = new Razorpay(options);
-                rzp.open();
+    prefill: {
+      email: email
+    },
 
-            };
+    notes: {
+      ticket_email: email
+    },
+
+    theme: {
+      color: "#ff3333"
+    }
+  };
+
+  var rzp = new Razorpay(options);
+  rzp.open();
+};
 
         });
 
@@ -3804,5 +3816,6 @@
 </body>
 
 </html>
+
 
 
