@@ -3760,12 +3760,10 @@
 
   // CREATE ORDER
   const orderRes = await fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email: email })
-  });
+  method: "POST",
+  // ✅ No Content-Type header — GAS accepts this without CORS preflight
+  body: JSON.stringify({ email: email })
+});
 
   const order = await orderRes.json();
 
@@ -3824,6 +3822,7 @@
 </body>
 
 </html>
+
 
 
 
