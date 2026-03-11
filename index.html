@@ -3762,12 +3762,15 @@
 
   // CREATE ORDER FROM APPS SCRIPT
   const orderRes = await fetch(
-    SCRIPT_URL + "?action=createOrder",
-    {
-      method: "POST",
-      body: JSON.stringify({ email: email })
-    }
-  );
+  SCRIPT_URL + "?action=createOrder",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email: email })
+  }
+);
 
   const order = await orderRes.json();
 
@@ -3816,6 +3819,7 @@
 </body>
 
 </html>
+
 
 
 
