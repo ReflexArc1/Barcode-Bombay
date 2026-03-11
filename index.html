@@ -6,6 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARCODE BOMBAY</title>
     <style>
+	.ticket-email-modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.8);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+}
+
+.ticket-email-box{
+background:#050505;
+border:2px solid #ff3333;
+padding:30px;
+width:320px;
+text-align:center;
+font-family:monospace;
+}
+
+.ticket-email-box h3{
+color:#ff3333;
+margin-bottom:10px;
+}
+
+.ticket-email-box input{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:black;
+border:1px solid #ff3333;
+color:white;
+}
+
+.ticket-email-box button{
+margin-top:15px;
+width:100%;
+padding:12px;
+background:#ff3333;
+border:none;
+color:black;
+font-weight:bold;
+cursor:pointer;
+}
         @font-face {
             font-family: 'Ticketing';
             src: url("ticketing (1).woff2") format("woff2");
@@ -163,7 +206,7 @@
             width: 200vw;
             pointer-events: none;
             z-index: 1000;
-            opacity: 0.08;
+            opacity: 0.06;
             height: 200vh;
             background: url("noise.gif");
         }
@@ -2597,7 +2640,7 @@
                     <div class="artist-genre">ANNOUNCEMENT SOON</div>
                 </div>
             </div>
-            <p class="section-label" style="margin-top:20px;">* FULL LINEUP REVEALED AT TICKET PURCHASE</p>
+            
         </div>
     </section>
 
@@ -2622,7 +2665,7 @@
                         <li>For those who commented</li>
                         <li>General floor access</li>
                     </ul>
-                    <button class="buy-btn buy-btn-filled rzp-ticket" data-amount="40000"
+                    <button id="phase0-btn" class="buy-btn buy-btn-filled rzp-ticket" data-amount="50000"
                         data-desc="Phase 0 — Barcode Bombay">BUY NOW</button>
                 </div>
 
@@ -2873,11 +2916,7 @@
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeEgg(); });
 
         // ── RAZORPAY ──
-        function openRazorpay(amount, desc) {
-            var rzp = new Razorpay({ "key": "YOUR_KEY_ID", "amount": amount, "currency": "INR", "name": "Barcode Bombay", "description": desc, "handler": function (r) { alert("Payment Successful!\nID: " + r.razorpay_payment_id); }, "theme": { "color": "#ff2a2a" } });
-            rzp.on('payment.failed', function (r) { alert("Failed: " + r.error.description); });
-            rzp.open();
-        }
+        
         document.querySelectorAll('.rzp-ticket').forEach(function (btn) {
             btn.addEventListener('click', function (e) { e.preventDefault(); openRazorpay(parseInt(btn.dataset.amount || '149900'), btn.dataset.desc || 'Ticket'); });
         });
@@ -3143,6 +3182,136 @@
             }
         });
     </script>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	<script>
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
+const btn = document.getElementById("phase0-btn");
+
+async function checkTickets() {
+
+  try {
+
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+
+    if (data.sold_out) {
+
+      btn.innerText = "SOLD OUT";
+      btn.disabled = true;
+      btn.style.opacity = "0.5";
+      btn.style.cursor = "not-allowed";
+
+    } else {
+
+      const left = data.total - data.sold;
+      btn.innerText = "BUY NOW (" + left + " LEFT)";
+
+    }
+
+  } catch (err) {
+
+    console.log("Ticket API error:", err);
+
+  }
+
+}
+
+// check on page load
+checkTickets();
+
+// optional: refresh every 15 seconds
+setInterval(checkTickets, 15000);
+
+</script>
+	<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRXABQXeklVljQhtyiqwEtoOqCWczizdcfPwN-Um4RsCWJVlMthWfsTC9mkGUkXsKd/exec";
+
+let selectedAmount = 0;
+let selectedDesc = "";
+
+const modal = document.getElementById("email-modal");
+const emailInput = document.getElementById("ticket-email");
+const continueBtn = document.getElementById("continue-payment");
+
+// BUY BUTTON CLICK
+document.querySelectorAll(".rzp-ticket").forEach(button => {
+
+  button.addEventListener("click", async function () {
+
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+
+    if (data.sold_out) {
+      alert("Tickets are sold out.");
+      return;
+    }
+
+    selectedAmount = this.dataset.amount;
+    selectedDesc = this.dataset.desc;
+
+    modal.style.display = "flex";
+
+  });
+
+});
+
+// CONTINUE BUTTON
+continueBtn.onclick = function () {
+
+  const email = emailInput.value;
+
+  if (!email) {
+    alert("Please enter your email");
+    return;
+  }
+
+  modal.style.display = "none";
+
+  var options = {
+    key: "rzp_live_RAp4IcVab7QxLH",
+    amount: selectedAmount,
+    currency: "INR",
+    name: "Barcode Bombay",
+    description: selectedDesc,
+    image: "barcode logo4.svg",
+
+    prefill: {
+      email: email
+    },
+
+    notes: {
+      ticket_email: email
+    },
+
+    theme: {
+      color: "#ff3333"
+    }
+  };
+
+  var rzp = new Razorpay(options);
+  rzp.open();
+
+};
+
+});
+
+</script>
+<div id="email-modal" class="ticket-email-modal">
+  <div class="ticket-email-box">
+
+    <h3>ENTER EMAIL</h3>
+    <p>Your ticket will be sent here</p>
+
+    <input id="ticket-email" type="email" placeholder="email@example.com">
+
+    <button id="continue-payment">CONTINUE</button>
+
+  </div>
+</div>
 </body>
 
 </html>
