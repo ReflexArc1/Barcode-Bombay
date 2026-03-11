@@ -3774,26 +3774,34 @@
   console.log("ORDER:", order);
 
   var options = {
-    key: "rzp_live_SQ5kMTnIikhsdj",
-    amount: order.amount,
-    currency: order.currency,
-    order_id: order.id,
+  key: "rzp_live_SQ5kMTnIikhsdj",
+  amount: order.amount,
+  currency: order.currency,
+  order_id: order.id,
 
-    name: "Barcode Bombay",
-    description: selectedDesc,
+  name: "Barcode Bombay",
+  description: selectedDesc,
 
-    prefill: {
-      email: email
-    },
+  prefill: { email: email },
+  notes: { ticket_email: email },
+  theme: { color: "#ff3333" },
 
-    notes: {
-      ticket_email: email
-    },
-
-    theme: {
-      color: "#ff3333"
-    }
-  };
+  // ✅ THIS IS THE KEY ADDITION
+  handler: async function (response) {
+    // Payment authorized — now tell your script to capture it and send the ticket
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "capture",
+        payment_id: response.razorpay_payment_id,
+        order_id: response.razorpay_order_id,
+        email: email,
+        amount: order.amount
+      })
+    });
+  }
+};
 
   var rzp = new Razorpay(options);
   rzp.open();
@@ -3818,6 +3826,7 @@
 </body>
 
 </html>
+
 
 
 
