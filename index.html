@@ -2957,8 +2957,13 @@
                         <li>For those who commented</li>
                         <li>General floor access</li>
                     </ul>
-                    <button id="phase0-btn" class="buy-btn buy-btn-filled rzp-ticket" data-amount="2000"
-                        data-desc="Phase 0 — Barcode Bombay">BUY NOW</button>
+                    <button 
+id="phase0-btn"
+class="buy-btn buy-btn-filled rzp-ticket"
+data-phase="phase0"
+data-desc="Phase 0 — Barcode Bombay">
+BUY NOW
+</button>
                 </div>
 
                 <div class="ticket-card fade-in" style="transition-delay:0.08s;">
@@ -2972,8 +2977,13 @@
                         <li>General floor access</li>
                         <li>Limited availability</li>
                     </ul>
-                    <button class="buy-btn buy-btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">[ OUT
-                        TOMORROW ]</button>
+                    <button 
+id="phase1-btn"
+class="buy-btn buy-btn-outline rzp-ticket"
+data-phase="phase1"
+data-desc="Phase 1 — Barcode Bombay">
+BUY NOW
+</button>
                 </div>
                 <div class="ticket-card fade-in" style="transition-delay:0.16s;">
                     <div class="ticket-stub left"></div>
@@ -3819,6 +3829,7 @@
 
             let selectedAmount = 0;
             let selectedDesc = "";
+            let selectedPhase = "";
 
             const modal = document.getElementById("email-modal");
             const emailInput = document.getElementById("ticket-email");
@@ -3837,6 +3848,7 @@
 
                     selectedAmount = this.dataset.amount;
                     selectedDesc = this.dataset.desc;
+                    selectedPhase = this.dataset.phase;
                     modal.style.display = "flex";
                 });
             });
@@ -3851,7 +3863,13 @@
                 try {
                     // ✅ GET request — no CORS issues at all
                     document.getElementById("payment-loading").style.display = "flex";
-                    const orderRes = await fetch(SCRIPT_URL + "?action=createOrder&email=" + encodeURIComponent(email));
+                    const orderRes = await fetch(
+SCRIPT_URL +
+"?action=createOrder&email=" +
+encodeURIComponent(email) +
+"&phase=" +
+selectedPhase
+);
                     const order = await orderRes.json();
                     document.getElementById("payment-loading").style.display = "none";
                     console.log("ORDER:", order);
@@ -3908,4 +3926,5 @@
 </body>
 
 </html>
+
 
