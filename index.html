@@ -3793,19 +3793,21 @@ BUY NOW
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
 
-                if (data.sold_out) {
+const phase0 = data.phase0;
 
-                    btn.innerText = "SOLD OUT";
-                    btn.disabled = true;
-                    btn.style.opacity = "0.5";
-                    btn.style.cursor = "not-allowed";
+if (phase0.sold_out) {
 
-                } else {
+    btn.innerText = "PHASE 0 SOLD OUT";
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+    btn.style.cursor = "not-allowed";
 
-                    const left = data.total - data.sold;
-                    btn.innerText = "BUY NOW (" + left + " LEFT)";
+} else {
 
-                }
+    const left = phase0.total - phase0.sold;
+    btn.innerText = "BUY PHASE 0 (" + left + " LEFT)";
+
+}
 
             } catch (err) {
 
@@ -3926,5 +3928,6 @@ selectedPhase
 </body>
 
 </html>
+
 
 
