@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+padding:40px;
+}
+
+#result{
+font-size:28px;
+margin-top:20px;
+font-weight:bold;
+}
+
+.valid{color:green;}
+.invalid{color:red;}
+.used{color:orange;}
+</style>
+
+</head>
+
+<body>
+
+<h2>Barcode Bombay Scanner</h2>
+
+<div id="reader" style="width:400px;margin:auto;"></div>
+
+<div id="result"></div>
+
+<script>
+
+const API = "https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
+
+function onScanSuccess(decodedText) {
+
+fetch(API + "?verify=" + decodedText)
+.then(r=>r.json())
+.then(data=>{
+
+const el = document.getElementById("result");
+
+if(data.status==="valid"){
+el.innerHTML="VALID TICKET";
+el.className="valid";
+}
+
+else if(data.status==="used"){
+el.innerHTML="ALREADY USED";
+el.className="used";
+}
+
+else{
+el.innerHTML="INVALID";
+el.className="invalid";
+}
+
+});
+
+}
+
+const scanner = new Html5QrcodeScanner(
+"reader",
+{fps:10, qrbox:250}
+);
+
+scanner.render(onScanSuccess);
+
+</script>
+
+</body>
+</html>
