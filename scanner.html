@@ -1,168 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Barcode Bombay Scanner</title>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+h1{
+color:#ff3c3c;
+}
+
+#scanner{
+width:100%;
+max-width:420px;
+height:320px;
+margin:auto;
+border-radius:12px;
+overflow:hidden;
+background:black;
+}
+
+#scanner video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.result{
+margin-top:20px;
+font-size:28px;
+font-weight:bold;
+padding:20px;
+border-radius:10px;
+}
+
+.valid{
+background:#1e4620;
+color:#4caf50;
+}
+
+.invalid{
+background:#4a1e1e;
+color:#f44336;
+}
+
+.used{
+background:#4a3b1e;
+color:#ff9800;
+}
+
+button{
+margin-top:20px;
+padding:12px 24px;
+font-size:18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:#ff3c3c;
+color:white;
+}
+
+.stats{
+margin-top:20px;
+opacity:.8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🎫 Barcode Bombay Scanner</h1>
+
+<div id="scanner"></div>
+
+<div id="result"></div>
+
+<button id="nextBtn" style="display:none">
+Scan Next Ticket
+</button>
+
+<div class="stats">
+Total: <span id="total">0</span> |
+Valid: <span id="valid">0</span> |
+Invalid: <span id="invalid">0</span>
+</div>
 
 <script>
 
-class BarcodeScanner {
+const API="https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
 
-constructor(){
-this.scanning=false;
-this.stats={total:0,valid:0,invalid:0};
+let scanning=true;
 
-this.resultDiv=document.getElementById("result");
-this.nextBtn=document.getElementById("nextTicketBtn");
+let stats={
+total:0,
+valid:0,
+invalid:0
+};
 
-this.startBtn=document.getElementById("startBtn");
-this.stopBtn=document.getElementById("stopBtn");
-
-this.startBtn.onclick=()=>this.start();
-this.stopBtn.onclick=()=>this.stop();
-this.nextBtn.onclick=()=>this.next();
-
-}
-
-start(){
-
-this.show("scanning","📷 Starting camera...");
+function startScanner(){
 
 Quagga.init({
+
 inputStream:{
 type:"LiveStream",
-target:document.querySelector("#video").parentElement,
+target:document.querySelector('#scanner'),
 constraints:{
 facingMode:"environment"
 }
 },
+
 decoder:{
 readers:["code_128_reader"]
 }
-},err=>{
+
+},function(err){
 
 if(err){
-console.error(err);
-this.show("invalid","Camera error");
+console.log(err);
 return;
 }
 
 Quagga.start();
-this.scanning=true;
-this.show("scanning","📸 Point camera at barcode");
-
-});
-
-Quagga.onDetected((data)=>{
-
-if(!this.scanning)return;
-
-this.scanning=false;
-
-const code=data.codeResult.code;
-
-Quagga.stop();
-
-this.verify(code);
+scanning=true;
 
 });
 
 }
 
-stop(){
+Quagga.onDetected(function(result){
+
+if(!scanning)return;
+
+scanning=false;
+
+const code=result.codeResult.code;
 
 Quagga.stop();
-this.scanning=false;
-this.show("","Camera stopped");
 
-}
+verifyTicket(code);
 
-next(){
+});
 
-this.nextBtn.style.display="none";
-this.start();
+async function verifyTicket(ticket){
 
-}
-
-async verify(ticketId){
-
-this.show("scanning","🔄 Verifying ticket...");
+document.getElementById("result").innerHTML="Checking...";
 
 try{
 
-const res=await fetch(
-"https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec?verify="+ticketId
-);
+const res=await fetch(API+"?verify="+ticket);
 
 const data=await res.json();
 
-this.stats.total++;
+stats.total++;
 
 if(data.status==="valid"){
 
-this.stats.valid++;
+stats.valid++;
 
-this.show("valid","✅ VALID TICKET<br>"+ticketId);
-
-this.flash("green");
+document.getElementById("result").innerHTML=
+'<div class="result valid">VALID TICKET</div>';
 
 }else if(data.status==="used"){
 
-this.stats.invalid++;
+stats.invalid++;
 
-this.show("invalid","⚠️ ALREADY USED<br>"+ticketId);
-
-this.flash("red");
+document.getElementById("result").innerHTML=
+'<div class="result used">ALREADY USED</div>';
 
 }else{
 
-this.stats.invalid++;
+stats.invalid++;
 
-this.show("invalid","❌ INVALID<br>"+ticketId);
-
-this.flash("red");
+document.getElementById("result").innerHTML=
+'<div class="result invalid">INVALID</div>';
 
 }
 
-this.updateStats();
+updateStats();
 
 }catch(e){
 
-this.show("invalid","Connection error");
+document.getElementById("result").innerHTML=
+'<div class="result invalid">Connection Error</div>';
 
 }
 
-this.nextBtn.style.display="inline-block";
+document.getElementById("nextBtn").style.display="inline-block";
 
 }
 
-show(type,msg){
+function updateStats(){
 
-this.resultDiv.innerHTML=
-`<div class="result ${type}">${msg}</div>`;
-
-}
-
-flash(color){
-
-const f=document.getElementById("flash");
-f.className="flash-effect flash-"+color;
-
-setTimeout(()=>f.className="flash-effect",300);
+document.getElementById("total").innerText=stats.total;
+document.getElementById("valid").innerText=stats.valid;
+document.getElementById("invalid").innerText=stats.invalid;
 
 }
 
-updateStats(){
+document.getElementById("nextBtn").onclick=function(){
 
-document.getElementById("totalScanned").innerText=this.stats.total;
-document.getElementById("validCount").innerText=this.stats.valid;
-document.getElementById("invalidCount").innerText=this.stats.invalid;
-document.getElementById("lastScan").innerText=new Date().toLocaleTimeString();
+this.style.display="none";
 
-}
+document.getElementById("result").innerHTML="";
 
-}
+startScanner();
 
-let scanner;
+};
 
-document.addEventListener("DOMContentLoaded",()=>{
-scanner=new BarcodeScanner();
-});
+startScanner();
 
 </script>
+
+</body>
+</html>
