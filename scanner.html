@@ -165,35 +165,42 @@ document.getElementById("result").innerHTML="Checking...";
 
 try{
 
-const res=await fetch(API+"?verify="+ticket);
+const res = await fetch(API+"?verify="+encodeURIComponent(ticket));
 
-const data=await res.json();
+const data = await res.json();
 
 stats.total++;
 
 if(data.status === "valid"){
 
+stats.valid++;
 showResult("valid","✅ VALID TICKET");
 
 }
-
 else if(data.status === "used"){
 
 showResult("used","⚠️ ALREADY USED");
 
 }
-
 else{
 
+stats.invalid++;
 showResult("invalid","❌ INVALID TICKET");
 
 }
+function showResult(type,text){
 
-updateStats();
+document.getElementById("result").innerHTML =
+'<div class="result '+type+'">'+text+'</div>';
+
 }
+updateStats();
+
 }catch(e){
 
-document.getElementById("result").innerHTML=
+console.error(e);
+
+document.getElementById("result").innerHTML =
 '<div class="result invalid">Connection Error</div>';
 
 }
@@ -226,6 +233,7 @@ startScanner();
 
 </body>
 </html>
+
 
 
 
