@@ -3752,6 +3752,11 @@
         const orderRes = await fetch(SCRIPT_URL + "?action=createOrder&email=" + encodeURIComponent(email));
         const order = await orderRes.json();
         console.log("ORDER:", order);
+        // 🔒 CHECK IF SOLD OUT
+if (order.error === "sold_out") {
+  alert("Tickets are sold out.");
+  return;
+}
 
         if (!order.id) {
             alert("Order failed: " + JSON.stringify(order));
@@ -3794,6 +3799,7 @@
 </body>
 
 </html>
+
 
 
 
