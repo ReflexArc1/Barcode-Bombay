@@ -171,26 +171,21 @@ const data=await res.json();
 
 stats.total++;
 
-if(data.status==="valid"){
+if(data.status === "valid"){
 
-stats.valid++;
+showResult("valid","✅ VALID TICKET");
 
-document.getElementById("result").innerHTML=
-'<div class="result valid">VALID TICKET</div>';
+}
 
-}else if(data.status==="used"){
+else if(data.status === "used"){
 
-stats.invalid++;
+showResult("used","⚠️ ALREADY USED");
 
-document.getElementById("result").innerHTML=
-'<div class="result used">ALREADY USED</div>';
+}
 
-}else{
+else{
 
-stats.invalid++;
-
-document.getElementById("result").innerHTML=
-'<div class="result invalid">INVALID</div>';
+showResult("invalid","❌ INVALID TICKET");
 
 }
 
@@ -231,6 +226,7 @@ startScanner();
 
 </body>
 </html>
+
 
 
 
