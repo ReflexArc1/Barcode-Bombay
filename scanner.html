@@ -1,44 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-
-<style>
-body{
-font-family:Arial;
-text-align:center;
-padding:30px;
-}
-
-#scanner{
-width:400px;
-margin:auto;
-}
-
-#result{
-font-size:28px;
-margin-top:20px;
-font-weight:bold;
-}
-
-.valid{color:green;}
-.invalid{color:red;}
-.used{color:orange;}
-</style>
-
-</head>
-
-<body>
-
-<h2>Barcode Bombay Scanner</h2>
 
 <div id="scanner"></div>
 <div id="result"></div>
+<button id="nextScan" style="display:none;margin-top:20px;font-size:18px;padding:10px 20px;">
+Scan Next Ticket
+</button>
 
 <script>
 
 const API = "https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
+
+let scanning = true;
+
+function startScanner(){
 
 Quagga.init({
 inputStream:{
@@ -60,12 +34,21 @@ return;
 }
 
 Quagga.start();
+scanning = true;
 
 });
 
+}
+
 Quagga.onDetected(function(result){
 
+if(!scanning) return;
+
+scanning = false;
+
 const code = result.codeResult.code;
+
+Quagga.stop();
 
 fetch(API + "?verify=" + code)
 .then(r=>r.json())
@@ -75,24 +58,34 @@ const el = document.getElementById("result");
 
 if(data.status==="valid"){
 el.innerHTML="VALID TICKET";
-el.className="valid";
+el.style.color="green";
 }
 
 else if(data.status==="used"){
 el.innerHTML="ALREADY USED";
-el.className="used";
+el.style.color="orange";
 }
 
 else{
 el.innerHTML="INVALID";
-el.className="invalid";
+el.style.color="red";
 }
 
+document.getElementById("nextScan").style.display="inline-block";
+
 });
 
 });
+
+document.getElementById("nextScan").onclick=function(){
+
+document.getElementById("result").innerHTML="";
+this.style.display="none";
+
+startScanner();
+
+};
+
+startScanner();
 
 </script>
-
-</body>
-</html>
