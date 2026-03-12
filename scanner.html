@@ -147,13 +147,13 @@ if(!scanning)return;
 
 scanning=false;
 
-const code = result.codeResult.code.trim();
-console.log("Scanned ticket:", code); 
+let code = result.codeResult.code;
+
+code = code.replace(/\s/g,'').trim();
+
+console.log("Scanned ticket:", code);
 
 Quagga.stop();
-
-document.getElementById("result").innerHTML =
-"Scanned ticket: " + code;
 
 verifyTicket(code);
 
@@ -165,7 +165,9 @@ document.getElementById("result").innerHTML="Checking...";
 
 try{
 
-const res = await fetch(API+"?verify="+encodeURIComponent(ticket));
+const res = await fetch(
+API + "?verify=" + encodeURIComponent(ticket.trim())
+);
 
 const data = await res.json();
 
@@ -233,6 +235,7 @@ startScanner();
 
 </body>
 </html>
+
 
 
 
