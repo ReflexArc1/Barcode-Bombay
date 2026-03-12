@@ -147,14 +147,16 @@ if(!scanning)return;
 
 scanning=false;
 
-const code=result.codeResult.code;
+const code = result.codeResult.code.trim();
+document.getElementById("result").innerHTML =
+"Scanned ticket: " + code;
 
 Quagga.stop();
 
 verifyTicket(code);
 
 });
-document.getElementById("result").innerHTML = "Scanned: " + ticket;
+
 async function verifyTicket(ticket){
 
 document.getElementById("result").innerHTML="Checking...";
@@ -227,4 +229,5 @@ startScanner();
 
 </body>
 </html>
+
 
