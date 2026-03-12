@@ -3922,18 +3922,7 @@ selectedPhase
             };
         });
     </script>
-    <script>document.getElementById("close-email-modal").onclick = function(){
-
-document.getElementById("email-modal").style.display = "none";
-
-};
-    document.getElementById("email-modal").addEventListener("click", function(e){
-
-if(e.target === this){
-this.style.display="none";
-}
-
-});</script>
+    
    <div id="email-modal" class="ticket-email-modal">
 
 <div class="ticket-email-box">
@@ -3956,9 +3945,24 @@ this.style.display="none";
             <p>Preparing secure checkout...</p>
         </div>
     </div>
+    <script>
+        document.getElementById("close-email-modal").onclick = function(){
+
+document.getElementById("email-modal").style.display = "none";
+
+};
+    document.getElementById("email-modal").addEventListener("click", function(e){
+
+if(e.target === this){
+this.style.display="none";
+}
+
+});
+    </script>
 </body>
 
 </html>
+
 
 
 
