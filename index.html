@@ -3340,7 +3340,8 @@ BUY NOW
     <script>
 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
-        const btn = document.getElementById("phase0-btn");
+        const phase0Btn = document.getElementById("phase0-btn");
+const phase1Btn = document.getElementById("phase1-btn");
 
         async function checkTickets() {
 
@@ -3353,10 +3354,10 @@ const phase0 = data.phase0;
 
 if (phase0.sold_out) {
 
-    btn.innerText = "PHASE 0 SOLD OUT";
-    btn.disabled = true;
-    btn.style.opacity = "0.5";
-    btn.style.cursor = "not-allowed";
+     phase0Btn.innerText = "PHASE 0 SOLD OUT";
+            phase0Btn.disabled = true;
+    phase0Btn.style.opacity = "0.5";
+    phase0Btn.style.cursor = "not-allowed";
 
 } else {
 
@@ -3364,7 +3365,21 @@ if (phase0.sold_out) {
     btn.innerText = "BUY NOW (" + left + " LEFT)";
 
 }
+const phase1 = data.phase1;
 
+        if (phase1.sold_out) {
+
+            phase1Btn.innerText = "PHASE 0 SOLD OUT";
+     phase1Btn.disabled = true;
+     phase1Btn.style.opacity = "0.5";
+     phase1Btn.style.cursor = "not-allowed";
+
+        } else {
+
+            const left = phase1.total - phase1.sold;
+            phase1Btn.innerText = "BUY NOW (" + left + " LEFT)";
+
+        }
             } catch (err) {
 
                 console.log("Ticket API error:", err);
@@ -3502,6 +3517,7 @@ this.style.display="none";
 </body>
 
 </html>
+
 
 
 
