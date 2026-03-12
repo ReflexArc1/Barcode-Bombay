@@ -3742,46 +3742,41 @@
 
         // CONTINUE BUTTON
         continueBtn.onclick = async function () {
-            const email = emailInput.value;
-            if (!email) { alert("Please enter your email"); return; }
+    const email = emailInput.value;
+    if (!email) { alert("Please enter your email"); return; }
 
-            modal.style.display = "none";
+    modal.style.display = "none";
 
-            try {
-                // ✅ NO Content-Type header — fixes CORS
-                const orderRes = await fetch(SCRIPT_URL + "?action=createOrder", {
-    method: "POST",
-    body: JSON.stringify({ email: email })
-});
+    try {
+        // ✅ GET request — no CORS issues at all
+        const orderRes = await fetch(SCRIPT_URL + "?action=createOrder&email=" + encodeURIComponent(email));
+        const order = await orderRes.json();
+        console.log("ORDER:", order);
 
-                const order = await orderRes.json();
-                console.log("ORDER:", order);
+        if (!order.id) {
+            alert("Order failed: " + JSON.stringify(order));
+            return;
+        }
 
-                if (!order.id) {
-                    alert("Order creation failed: " + JSON.stringify(order));
-                    return;
-                }
-
-                var options = {
-                    key: "rzp_live_SQ5kMTnIikhsdj",
-                    amount: order.amount,
-                    currency: order.currency,
-                    order_id: order.id,
-                    name: "Barcode Bombay",
-                    description: selectedDesc,
-                    prefill: { email: email },
-                    notes: { ticket_email: email },
-                    theme: { color: "#ff3333" }
-                };
-
-                var rzp = new Razorpay(options);
-                rzp.open();
-
-            } catch (err) {
-                console.error("Payment error:", err);
-                alert("Something went wrong: " + err.message);
-            }
+        var options = {
+            key: "rzp_live_SQ5kMTnIikhsdj",
+            amount: order.amount,
+            currency: order.currency,
+            order_id: order.id,
+            name: "Barcode Bombay",
+            description: selectedDesc,
+            prefill: { email: email },
+            notes: { ticket_email: email },
+            theme: { color: "#ff3333" }
         };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+
+    } catch (err) {
+        alert("Something went wrong: " + err.message);
+    }
+};
     });
 </script>
     <div id="email-modal" class="ticket-email-modal">
@@ -3799,6 +3794,7 @@
 </body>
 
 </html>
+
 
 
 
