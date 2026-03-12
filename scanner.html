@@ -1,24 +1,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
-<div id="scanner"></div>
-<div id="result"></div>
-<button id="nextScan" style="display:none;margin-top:20px;font-size:18px;padding:10px 20px;">
-Scan Next Ticket
-</button>
-
 <script>
 
-const API = "https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
+class BarcodeScanner {
 
-let scanning = true;
+constructor(){
+this.scanning=false;
+this.stats={total:0,valid:0,invalid:0};
 
-function startScanner(){
+this.resultDiv=document.getElementById("result");
+this.nextBtn=document.getElementById("nextTicketBtn");
+
+this.startBtn=document.getElementById("startBtn");
+this.stopBtn=document.getElementById("stopBtn");
+
+this.startBtn.onclick=()=>this.start();
+this.stopBtn.onclick=()=>this.stop();
+this.nextBtn.onclick=()=>this.next();
+
+}
+
+start(){
+
+this.show("scanning","📷 Starting camera...");
 
 Quagga.init({
 inputStream:{
-name:"Live",
 type:"LiveStream",
-target:document.querySelector('#scanner'),
+target:document.querySelector("#video").parentElement,
 constraints:{
 facingMode:"environment"
 }
@@ -26,66 +35,134 @@ facingMode:"environment"
 decoder:{
 readers:["code_128_reader"]
 }
-},function(err){
+},err=>{
 
 if(err){
-console.log(err);
+console.error(err);
+this.show("invalid","Camera error");
 return;
 }
 
 Quagga.start();
-scanning = true;
+this.scanning=true;
+this.show("scanning","📸 Point camera at barcode");
 
 });
 
-}
+Quagga.onDetected((data)=>{
 
-Quagga.onDetected(function(result){
+if(!this.scanning)return;
 
-if(!scanning) return;
+this.scanning=false;
 
-scanning = false;
-
-const code = result.codeResult.code;
+const code=data.codeResult.code;
 
 Quagga.stop();
 
-fetch(API + "?verify=" + code)
-.then(r=>r.json())
-.then(data=>{
+this.verify(code);
 
-const el = document.getElementById("result");
+});
+
+}
+
+stop(){
+
+Quagga.stop();
+this.scanning=false;
+this.show("","Camera stopped");
+
+}
+
+next(){
+
+this.nextBtn.style.display="none";
+this.start();
+
+}
+
+async verify(ticketId){
+
+this.show("scanning","🔄 Verifying ticket...");
+
+try{
+
+const res=await fetch(
+"https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec?verify="+ticketId
+);
+
+const data=await res.json();
+
+this.stats.total++;
 
 if(data.status==="valid"){
-el.innerHTML="VALID TICKET";
-el.style.color="green";
+
+this.stats.valid++;
+
+this.show("valid","✅ VALID TICKET<br>"+ticketId);
+
+this.flash("green");
+
+}else if(data.status==="used"){
+
+this.stats.invalid++;
+
+this.show("invalid","⚠️ ALREADY USED<br>"+ticketId);
+
+this.flash("red");
+
+}else{
+
+this.stats.invalid++;
+
+this.show("invalid","❌ INVALID<br>"+ticketId);
+
+this.flash("red");
+
 }
 
-else if(data.status==="used"){
-el.innerHTML="ALREADY USED";
-el.style.color="orange";
+this.updateStats();
+
+}catch(e){
+
+this.show("invalid","Connection error");
+
 }
 
-else{
-el.innerHTML="INVALID";
-el.style.color="red";
+this.nextBtn.style.display="inline-block";
+
 }
 
-document.getElementById("nextScan").style.display="inline-block";
+show(type,msg){
 
+this.resultDiv.innerHTML=
+`<div class="result ${type}">${msg}</div>`;
+
+}
+
+flash(color){
+
+const f=document.getElementById("flash");
+f.className="flash-effect flash-"+color;
+
+setTimeout(()=>f.className="flash-effect",300);
+
+}
+
+updateStats(){
+
+document.getElementById("totalScanned").innerText=this.stats.total;
+document.getElementById("validCount").innerText=this.stats.valid;
+document.getElementById("invalidCount").innerText=this.stats.invalid;
+document.getElementById("lastScan").innerText=new Date().toLocaleTimeString();
+
+}
+
+}
+
+let scanner;
+
+document.addEventListener("DOMContentLoaded",()=>{
+scanner=new BarcodeScanner();
 });
-
-});
-
-document.getElementById("nextScan").onclick=function(){
-
-document.getElementById("result").innerHTML="";
-this.style.display="none";
-
-startScanner();
-
-};
-
-startScanner();
 
 </script>
