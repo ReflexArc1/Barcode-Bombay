@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARCODE BOMBAY</title>
     <style>
+        .email-close{
+position:absolute;
+top:10px;
+right:12px;
+background:none;
+border:none;
+font-size:18px;
+cursor:pointer;
+}
         .payment-loading {
             position: fixed;
             top: 0;
@@ -62,6 +71,7 @@
             padding: 30px;
             width: 320px;
             text-align: center;
+            z-index:100000;
             font-family: monospace;
         }
 
@@ -3912,18 +3922,34 @@ selectedPhase
             };
         });
     </script>
-    <div id="email-modal" class="ticket-email-modal">
-        <div class="ticket-email-box">
+    <script>document.getElementById("close-email-modal").onclick = function(){
 
-            <h3>ENTER EMAIL</h3>
-            <p>Your ticket will be sent here</p>
+document.getElementById("email-modal").style.display = "none";
 
-            <input id="ticket-email" type="email" placeholder="email@example.com">
+};
+    document.getElementById("email-modal").addEventListener("click", function(e){
 
-            <button id="continue-payment">CONTINUE</button>
+if(e.target === this){
+this.style.display="none";
+}
 
-        </div>
-    </div>
+});</script>
+   <div id="email-modal" class="ticket-email-modal">
+
+<div class="ticket-email-box">
+
+<button id="close-email-modal" class="email-close">✕</button>
+
+<h3>ENTER EMAIL</h3>
+<p>Your ticket will be sent here</p>
+
+<input id="ticket-email" type="email" placeholder="email@example.com">
+
+<button id="continue-payment">CONTINUE</button>
+
+</div>
+
+</div>
     <div id="payment-loading" class="payment-loading">
         <div class="loader-box">
             <div class="spinner"></div>
@@ -3933,6 +3959,7 @@ selectedPhase
 </body>
 
 </html>
+
 
 
 
