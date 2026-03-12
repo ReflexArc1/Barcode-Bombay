@@ -117,6 +117,7 @@
 
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         body {
@@ -1927,6 +1928,49 @@
             body.brutalist-mode .cdown-num {
                 /* Scale down the massive brutalist shadows on mobile so they don't break the typography */
                 text-shadow: 2px 2px 0 var(--red), -1px -1px 0 var(--blue);
+            }
+
+            /* ── Prevent brutalist offset shadows from causing horizontal scroll on mobile ── */
+            body.brutalist-mode .about-specs,
+            body.brutalist-mode .wwd-grid,
+            body.brutalist-mode .past-grid,
+            body.brutalist-mode .lineup-grid,
+            body.brutalist-mode a.artist-card {
+                box-shadow: 0 4px 0 var(--blue);
+            }
+
+            body.brutalist-mode .ticket-card {
+                box-shadow: 0 4px 0 #000;
+            }
+
+            body.brutalist-mode .ticket-card.featured {
+                box-shadow: 0 5px 0 var(--red);
+            }
+
+            body.brutalist-mode .cdown-unit {
+                box-shadow: 0 3px 0 #000;
+            }
+
+            body.brutalist-mode .mic-viz-container {
+                box-shadow: 0 5px 0 #000;
+            }
+
+            body.brutalist-mode .coupon-wrapper {
+                box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+            }
+
+            body.brutalist-mode .btn {
+                box-shadow: 0 3px 0 #000;
+            }
+
+            body.brutalist-mode .btn:hover {
+                box-shadow: 0 5px 0 #000;
+                transform: translate(0, -2px);
+            }
+
+            /* Marquee rotation causes overflow on narrow screens */
+            body.brutalist-mode .marquee-wrap {
+                transform: none;
             }
         }
 
