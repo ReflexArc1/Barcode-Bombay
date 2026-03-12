@@ -6,40 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARCODE BOMBAY</title>
     <style>
-        .payment-loading{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
+        .payment-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
 
-.loader-box{
-text-align:center;
-color:white;
-font-family:Arial;
-}
+        .loader-box {
+            text-align: center;
+            color: white;
+            font-family: Arial;
+        }
 
-.spinner{
-width:60px;
-height:60px;
-border:5px solid rgba(255,255,255,0.2);
-border-top:5px solid #ff3333;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:auto;
-margin-bottom:15px;
-}
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top: 5px solid #ff3333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: auto;
+            margin-bottom: 15px;
+        }
 
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         .ticket-email-modal {
             position: fixed;
             inset: 0;
@@ -2513,8 +2519,10 @@ margin-bottom:15px;
             align-items: center;
             justify-content: center;
             transition: opacity 0.8s ease;
-            overflow: hidden;       /* prevent page scroll showing through */
-            touch-action: none;     /* disable browser scroll on overlay */
+            overflow: hidden;
+            /* prevent page scroll showing through */
+            touch-action: none;
+            /* disable browser scroll on overlay */
         }
 
         #password-overlay-bg {
@@ -3157,7 +3165,7 @@ margin-bottom:15px;
 
         // ── RAZORPAY ──
 
-       
+
 
         // ── 3D TICKET MODAL ──
         var ticketBtn = document.getElementById('floating-ticket-btn');
@@ -3441,7 +3449,7 @@ margin-bottom:15px;
                 // Clicking anywhere refocuses the input
                 pwdOverlay.addEventListener('click', (e) => {
                     if (e.target === pwdOverlay || e.target.classList.contains('password-container')) {
-                        pwdInput.focus()
+                        pwdInput.focus();
                     }
                 });
 
@@ -3455,58 +3463,10 @@ margin-bottom:15px;
                     // Mouse interaction
                     let mouse = { x: null, y: null, radius: 150, isDown: false, vx: 0, vy: 0, lastX: 0, lastY: 0 };
 
-                    window.addEventListener('mousemove', (e) => {
-                        mouse.vx = e.clientX - mouse.lastX;
-                        mouse.vy = e.clientY - mouse.lastY;
-                        mouse.x = e.clientX;
-                        mouse.y = e.clientY;
-                        mouse.lastX = e.clientX;
-                        mouse.lastY = e.clientY;
-                    });
-
-                    window.addEventListener('touchmove', (e) => {
-                        if (e.target === pwdInput) return;
-                        e.preventDefault(); // prevent page scroll behind overlay
-                        const dx = e.touches[0].clientX - touchStartX;
-                        const dy = e.touches[0].clientY - touchStartY;
-                        if (Math.sqrt(dx*dx + dy*dy) > 10) touchMoved = true; // mark as drag
-                        mouse.vx = e.touches[0].clientX - mouse.lastX;
-                        mouse.vy = e.touches[0].clientY - mouse.lastY;
-                        mouse.x = e.touches[0].clientX;
-                        mouse.y = e.touches[0].clientY;
-                        mouse.lastX = e.touches[0].clientX;
-                        mouse.lastY = e.touches[0].clientY;
-                    }, { passive: false }); // passive:false needed for preventDefault
-
-                    // Track touch start so we can tell tap apart from drag
+                    // Track touch state
                     let touchStartX = 0, touchStartY = 0, touchMoved = false;
 
-                    window.addEventListener('touchstart', (e) => {
-                        if (e.target === pwdInput) return; // let the input do its own thing
-                        touchStartX = e.touches[0].clientX;
-                        touchStartY = e.touches[0].clientY;
-                        touchMoved = false;
-                        mouse.isDown = true;
-                        mouse.lastX = touchStartX;
-                        mouse.lastY = touchStartY;
-                    });
-
-                    window.addEventListener('touchend', (e) => {
-                        if (e.target === pwdInput) return;
-                        // Only explode if user barely moved (i.e. it was a tap, not a drag)
-                        if (!touchMoved) {
-                            triggerExplosion(touchStartX, touchStartY);
-                        }
-                        mouse.isDown = false;
-                        mouse.x = null;
-                        mouse.y = null;
-                        mouse.vx = 0;
-                        mouse.vy = 0;
-                        touchMoved = false;
-                    });
-
                     const triggerExplosion = (x, y) => {
-                        // No focus call here — only the input field itself should open the keyboard
                         particles.forEach(p => {
                             let dx = p.x - x;
                             let dy = p.y - y;
@@ -3519,23 +3479,83 @@ margin-bottom:15px;
                         });
                     };
 
-                    window.addEventListener('mousedown', () => mouse.isDown = true);
-                    ['mouseup', 'mouseleave'].forEach(evt => window.addEventListener(evt, () => {
+                    // Named handlers so we can remove them all on unlock
+                    const onMouseMove = (e) => {
+                        mouse.vx = e.clientX - mouse.lastX;
+                        mouse.vy = e.clientY - mouse.lastY;
+                        mouse.x = e.clientX;
+                        mouse.y = e.clientY;
+                        mouse.lastX = e.clientX;
+                        mouse.lastY = e.clientY;
+                    };
+                    const onTouchMove = (e) => {
+                        if (e.target === pwdInput) return;
+                        e.preventDefault(); // prevent page scroll behind overlay
+                        const dx = e.touches[0].clientX - touchStartX;
+                        const dy = e.touches[0].clientY - touchStartY;
+                        if (Math.sqrt(dx*dx + dy*dy) > 10) touchMoved = true;
+                        mouse.vx = e.touches[0].clientX - mouse.lastX;
+                        mouse.vy = e.touches[0].clientY - mouse.lastY;
+                        mouse.x = e.touches[0].clientX;
+                        mouse.y = e.touches[0].clientY;
+                        mouse.lastX = e.touches[0].clientX;
+                        mouse.lastY = e.touches[0].clientY;
+                    };
+                    const onTouchStart = (e) => {
+                        if (e.target === pwdInput) return;
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                        touchMoved = false;
+                        mouse.isDown = true;
+                        mouse.lastX = touchStartX;
+                        mouse.lastY = touchStartY;
+                    };
+                    const onTouchEnd = (e) => {
+                        if (e.target === pwdInput) return;
+                        if (!touchMoved) {
+                            triggerExplosion(touchStartX, touchStartY);
+                        }
                         mouse.isDown = false;
                         mouse.x = null;
                         mouse.y = null;
                         mouse.vx = 0;
                         mouse.vy = 0;
-                    }));
-
-                    window.addEventListener('click', (e) => {
-                        // Ignore input clicks
+                        touchMoved = false;
+                    };
+                    const onMouseDown = () => mouse.isDown = true;
+                    const onMouseUpLeave = () => {
+                        mouse.isDown = false;
+                        mouse.x = null;
+                        mouse.y = null;
+                        mouse.vx = 0;
+                        mouse.vy = 0;
+                    };
+                    const onWindowClick = (e) => {
                         if (e.target !== pwdInput) {
                             triggerExplosion(e.clientX, e.clientY);
                         }
-                    });
+                    };
 
-                    // touchstart explosion is now handled above via tap detection
+                    // Remove all overlay listeners after unlock so touch/scroll works normally
+                    function removeOverlayListeners() {
+                        window.removeEventListener('mousemove', onMouseMove);
+                        window.removeEventListener('touchmove', onTouchMove);
+                        window.removeEventListener('touchstart', onTouchStart);
+                        window.removeEventListener('touchend', onTouchEnd);
+                        window.removeEventListener('mousedown', onMouseDown);
+                        window.removeEventListener('mouseup', onMouseUpLeave);
+                        window.removeEventListener('mouseleave', onMouseUpLeave);
+                        window.removeEventListener('click', onWindowClick);
+                    }
+
+                    window.addEventListener('mousemove', onMouseMove);
+                    window.addEventListener('touchmove', onTouchMove, { passive: false });
+                    window.addEventListener('touchstart', onTouchStart);
+                    window.addEventListener('touchend', onTouchEnd);
+                    window.addEventListener('mousedown', onMouseDown);
+                    window.addEventListener('mouseup', onMouseUpLeave);
+                    window.addEventListener('mouseleave', onMouseUpLeave);
+                    window.addEventListener('click', onWindowClick);
 
                     function initCanvas() {
                         width = window.innerWidth;
@@ -3675,6 +3695,9 @@ margin-bottom:15px;
                             // Stop Animation
                             if (rainAnimFrame) cancelAnimationFrame(rainAnimFrame);
 
+                            // Remove all overlay window listeners so touch/scroll works after unlock
+                            removeOverlayListeners();
+
                             // Let the 'granted' blink for half a second before unlocking
                             setTimeout(() => {
                                 document.body.classList.remove('locked');
@@ -3746,80 +3769,80 @@ margin-bottom:15px;
 
     </script>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
 
-        let selectedAmount = 0;
-        let selectedDesc = "";
+            let selectedAmount = 0;
+            let selectedDesc = "";
 
-        const modal = document.getElementById("email-modal");
-        const emailInput = document.getElementById("ticket-email");
-        const continueBtn = document.getElementById("continue-payment");
+            const modal = document.getElementById("email-modal");
+            const emailInput = document.getElementById("ticket-email");
+            const continueBtn = document.getElementById("continue-payment");
 
-        // BUY BUTTON CLICK
-        document.querySelectorAll(".rzp-ticket").forEach(button => {
-            button.addEventListener("click", async function () {
-                const res = await fetch(SCRIPT_URL);
-                const data = await res.json();
+            // BUY BUTTON CLICK
+            document.querySelectorAll(".rzp-ticket").forEach(button => {
+                button.addEventListener("click", async function () {
+                    const res = await fetch(SCRIPT_URL);
+                    const data = await res.json();
 
-                if (data.sold_out) {
-                    alert("Tickets are sold out.");
-                    return;
-                }
+                    if (data.sold_out) {
+                        alert("Tickets are sold out.");
+                        return;
+                    }
 
-                selectedAmount = this.dataset.amount;
-                selectedDesc = this.dataset.desc;
-                modal.style.display = "flex";
+                    selectedAmount = this.dataset.amount;
+                    selectedDesc = this.dataset.desc;
+                    modal.style.display = "flex";
+                });
             });
+
+            // CONTINUE BUTTON
+            continueBtn.onclick = async function () {
+                const email = emailInput.value;
+                if (!email) { alert("Please enter your email"); return; }
+
+                modal.style.display = "none";
+
+                try {
+                    // ✅ GET request — no CORS issues at all
+                    document.getElementById("payment-loading").style.display = "flex";
+                    const orderRes = await fetch(SCRIPT_URL + "?action=createOrder&email=" + encodeURIComponent(email));
+                    const order = await orderRes.json();
+                    document.getElementById("payment-loading").style.display = "none";
+                    console.log("ORDER:", order);
+                    // 🔒 CHECK IF SOLD OUT
+                    if (order.error === "sold_out") {
+                        alert("Tickets are sold out.");
+                        return;
+                    }
+
+                    if (!order.id) {
+                        alert("Order failed: " + JSON.stringify(order));
+                        return;
+                    }
+
+                    var options = {
+                        key: "rzp_live_SQ5kMTnIikhsdj",
+                        amount: order.amount,
+                        currency: order.currency,
+                        order_id: order.id,
+                        name: "Barcode Bombay",
+                        description: selectedDesc,
+                        prefill: { email: email },
+                        notes: { ticket_email: email },
+                        theme: { color: "#ff3333" }
+                    };
+
+                    var rzp = new Razorpay(options);
+                    rzp.open();
+
+                } catch (err) {
+                    alert("Something went wrong: " + err.message);
+                }
+            };
         });
-
-        // CONTINUE BUTTON
-        continueBtn.onclick = async function () {
-    const email = emailInput.value;
-    if (!email) { alert("Please enter your email"); return; }
-
-    modal.style.display = "none";
-
-    try {
-        // ✅ GET request — no CORS issues at all
-        document.getElementById("payment-loading").style.display="flex";
-        const orderRes = await fetch(SCRIPT_URL + "?action=createOrder&email=" + encodeURIComponent(email));
-        const order = await orderRes.json();
-        document.getElementById("payment-loading").style.display="none";
-        console.log("ORDER:", order);
-        // 🔒 CHECK IF SOLD OUT
-if (order.error === "sold_out") {
-  alert("Tickets are sold out.");
-  return;
-}
-
-        if (!order.id) {
-            alert("Order failed: " + JSON.stringify(order));
-            return;
-        }
-
-        var options = {
-            key: "rzp_live_SQ5kMTnIikhsdj",
-            amount: order.amount,
-            currency: order.currency,
-            order_id: order.id,
-            name: "Barcode Bombay",
-            description: selectedDesc,
-            prefill: { email: email },
-            notes: { ticket_email: email },
-            theme: { color: "#ff3333" }
-        };
-
-        var rzp = new Razorpay(options);
-        rzp.open();
-
-    } catch (err) {
-        alert("Something went wrong: " + err.message);
-    }
-};
-    });
-</script>
+    </script>
     <div id="email-modal" class="ticket-email-modal">
         <div class="ticket-email-box">
 
@@ -3833,26 +3856,11 @@ if (order.error === "sold_out") {
         </div>
     </div>
     <div id="payment-loading" class="payment-loading">
-  <div class="loader-box">
-    <div class="spinner"></div>
-    <p>Preparing secure checkout...</p>
-  </div>
-</div>
+        <div class="loader-box">
+            <div class="spinner"></div>
+            <p>Preparing secure checkout...</p>
+        </div>
+    </div>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
