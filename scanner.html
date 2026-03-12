@@ -151,9 +151,10 @@ let code = result.codeResult.code;
 
 code = code.replace(/\s/g,'').trim();
 
-console.log("Scanned ticket:", code);
-
 Quagga.stop();
+
+document.getElementById("result").innerHTML =
+'<div class="result invalid">SCANNED:<br>'+code+'</div>';
 
 verifyTicket(code);
 
@@ -235,6 +236,7 @@ startScanner();
 
 </body>
 </html>
+
 
 
 
