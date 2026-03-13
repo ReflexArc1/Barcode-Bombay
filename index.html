@@ -6,16 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARCODE BOMBAY</title>
     <style>
-        .email-close{
-position:absolute;
-top:10px;
-right:12px;
-background:none;
-border:none;
-font-size:18px;
-cursor:pointer;
-display:none;
-}
+        .email-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+        }
+
         .payment-loading {
             position: fixed;
             top: 0;
@@ -72,7 +73,7 @@ display:none;
             padding: 30px;
             width: 320px;
             text-align: center;
-            z-index:100000;
+            z-index: 100000;
             font-family: monospace;
         }
 
@@ -1412,6 +1413,79 @@ display:none;
             transform: scale(1.02);
         }
 
+        /* ─── STOCK INDICATOR ─── */
+        .stock-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            transition: opacity 0.3s;
+        }
+
+        .stock-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            box-shadow: 0 0 5px var(--text-muted);
+            animation: pulse-dot 2s infinite ease-in-out;
+        }
+
+        .stock-label {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Status Colors */
+        [data-stock="high"] .stock-dot {
+            background: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+        }
+
+        [data-stock="high"] .stock-label {
+            color: #00ff00;
+        }
+
+        [data-stock="low"] .stock-dot {
+            background: #ffaa00;
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.6);
+        }
+
+        [data-stock="low"] .stock-label {
+            color: #ffaa00;
+        }
+
+        [data-stock="out"] .stock-dot {
+            background: var(--red);
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+            animation: none;
+            /* Stop pulsing if out */
+        }
+
+        [data-stock="out"] .stock-label {
+            color: var(--red);
+        }
+
+        @keyframes pulse-dot {
+            0% {
+                opacity: 0.6;
+                transform: scale(0.95);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            100% {
+                opacity: 0.6;
+                transform: scale(0.95);
+            }
+        }
+
         /* ─── EASTER EGG ─── */
         #egg-overlay {
             display: none;
@@ -1902,6 +1976,18 @@ display:none;
             color: #000;
             font-weight: 900;
             text-shadow: none;
+        }
+
+        body.brutalist-mode .stock-dot {
+            border: 2px solid #000;
+            box-shadow: 3px 3px 0 #000 !important;
+            animation: none;
+            /* No animations in brutalism */
+        }
+
+        body.brutalist-mode .stock-label {
+            color: #000 !important;
+            font-weight: 900;
         }
 
         body.brutalist-mode .hero-event-title,
@@ -2560,7 +2646,7 @@ display:none;
             transform: scale(1.02);
         }
 
-      
+
 
         @keyframes glitch-anim {
             0% {
@@ -2593,7 +2679,7 @@ display:none;
 <body>
 
     <!-- ═══ PASSWORD OVERLAY ═══ -->
-    
+
 
     <!-- ═══ INTRO LOADER ═══ -->
     <div id="intro-wrapper">
@@ -2803,13 +2889,12 @@ display:none;
                         <li>For those who commented</li>
                         <li>General floor access</li>
                     </ul>
-                    <button 
-id="phase0-btn"
-class="buy-btn buy-btn-filled rzp-ticket"
-data-phase="phase0"
-data-desc="Phase 0 — Barcode Bombay">
-BUY NOW
-</button>
+                    <div class="stock-status" id="stock-p0" data-stock="high">
+                        <div class="stock-dot"></div>
+                        <div class="stock-label">CHECKING STATUS...</div>
+                    </div>
+                    <button id="phase0-btn" class="buy-btn buy-btn-filled rzp-ticket" data-amount="2000"
+                        data-phase="phase0" data-desc="Phase 0 — Barcode Bombay">BUY NOW</button>
                 </div>
 
                 <div class="ticket-card fade-in" style="transition-delay:0.08s;">
@@ -2823,13 +2908,12 @@ BUY NOW
                         <li>General floor access</li>
                         <li>Limited availability</li>
                     </ul>
-                    <button 
-id="phase1-btn"
-class="buy-btn buy-btn-outline rzp-ticket"
-data-phase="phase1"
-data-desc="Phase 1 — Barcode Bombay">
-BUY NOW
-</button>
+                    <div class="stock-status" id="stock-p1" data-stock="high">
+                        <div class="stock-dot"></div>
+                        <div class="stock-label">CHECKING STATUS...</div>
+                    </div>
+                    <button id="phase1-btn" class="buy-btn buy-btn-outline rzp-ticket" data-amount="60000"
+                        data-phase="phase1" data-desc="Phase 1 — Barcode Bombay">BUY NOW</button>
                 </div>
                 <div class="ticket-card fade-in" style="transition-delay:0.16s;">
                     <div class="ticket-stub left"></div>
@@ -2842,30 +2926,16 @@ BUY NOW
                         <li>General floor access</li>
                         <li>Limited availability</li>
                     </ul>
-                    <button
-id="phase2-btn"
-class="buy-btn buy-btn-filled"
-disabled
-style="opacity:0.4"
-data-phase="phase2"
-data-desc="Phase 2 — Barcode Bombay">
-[ OUT TOMORROW ]
-</button>
+                    <div class="stock-status" id="stock-p2" data-stock="low">
+                        <div class="stock-dot"></div>
+                        <div class="stock-label">CHECKING STATUS...</div>
+                    </div>
+                    <button id="phase2-btn" class="buy-btn buy-btn-filled" disabled style="opacity:0.4"
+                        data-phase="phase2" data-desc="Phase 2 — Barcode Bombay">
+                        [ OUT TOMORROW ]
+                    </button>
                 </div>
-                <div class="ticket-card fade-in" style="transition-delay:0.24s;">
-                    <div class="ticket-stub left"></div>
-                    <div class="ticket-stub"></div>
-                    <div class="ticket-tier">TIER 03 — FINAL</div>
-                    <div class="ticket-name">PHASE 3</div>
-                    <hr class="ticket-divider">
-                    <div class="ticket-price" style="opacity: 0.3; letter-spacing: 4px;"><sup>₹</sup>?,???</div>
-                    <ul class="ticket-perks">
-                        <li>General floor access</li>
-                        <li>Limited availability</li>
-                    </ul>
-                    <button class="buy-btn buy-btn-outline" disabled style="opacity: 0.3; cursor: not-allowed;">[ LOCKED
-                        ]</button>
-                </div>
+
             </div>
         </div>
     </section>
@@ -2928,13 +2998,10 @@ data-desc="Phase 2 — Barcode Bombay">
                 <h3>PHASE 1 ACCESS</h3>
                 <p>Limited availability. General floor access</p>
                 <div class="price"><sup>₹</sup>600</div>
-                <button 
-id="phase1-btn"
-class="buy-btn buy-btn-outline rzp-ticket"
-data-phase="phase1"
-data-desc="Phase 1 — Barcode Bombay">
-BUY NOW
-</button>
+                <button id="phase1-btn" class="buy-btn buy-btn-outline rzp-ticket" data-phase="phase1"
+                    data-desc="Phase 1 — Barcode Bombay">
+                    BUY NOW
+                </button>
             </div>
         </div>
     </div>
@@ -3341,14 +3408,14 @@ BUY NOW
         });
 
         // ── PASSWORD PROTECTION ──
-       
+
     </script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaIFrMpVuQhTx8EqyKQv-TrP7LaC5R6QWVbg8XuqjtTh9QhDHN-2hRDTXWYt7gOG2U/exec";
         const phase0Btn = document.getElementById("phase0-btn");
-const phase1Btn = document.getElementById("phase1-btn");
+        const phase1Btn = document.getElementById("phase1-btn");
 
         async function checkTickets() {
 
@@ -3357,40 +3424,72 @@ const phase1Btn = document.getElementById("phase1-btn");
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
 
-const phase0 = data.phase0;
+                // Helper to update stock UI
+                function updateStockUI(phaseData, btnElement, stockId, phaseName, outText) {
+                    const stockContainer = document.getElementById(stockId);
+                    const stockLabel = stockContainer.querySelector('.stock-label');
 
-if (phase0.sold_out) {
+                    if (!phaseData) return;
 
-     phase0Btn.innerText = "PHASE 0 SOLD OUT";
-            phase0Btn.disabled = true;
-    phase0Btn.style.opacity = "0.5";
-    phase0Btn.style.cursor = "not-allowed";
+                    if (phaseData.sold_out) {
+                        btnElement.innerText = phaseName + " SOLD OUT";
+                        btnElement.disabled = true;
+                        btnElement.style.opacity = "0.5";
+                        btnElement.style.cursor = "not-allowed";
 
-} else {
+                        stockContainer.setAttribute("data-stock", "out");
+                        stockLabel.innerText = "SOLD OUT";
+                    } else {
+                        const left = phaseData.total - phaseData.sold;
+                        btnElement.innerText = "BUY NOW (" + left + " LEFT)";
 
-    const left = phase0.total - phase0.sold;
-    btn.innerText = "BUY NOW (" + left + " LEFT)";
+                        // Calculate stock ratio
+                        const ratio = left / phaseData.total;
 
-}
-const phase1 = data.phase1;
+                        if (ratio > 0.4) {
+                            stockContainer.setAttribute("data-stock", "high");
+                            stockLabel.innerText = "IN STOCK";
+                        } else {
+                            stockContainer.setAttribute("data-stock", "low");
+                            stockLabel.innerText = "FEW LEFT";
+                        }
+                    }
+                }
 
-        if (phase1.sold_out) {
+                // Phase 0
+                updateStockUI(data.phase0, phase0Btn, 'stock-p0', "PHASE 0", "SOLD OUT");
 
-            phase1Btn.innerText = "PHASE 1 SOLD OUT";
-     phase1Btn.disabled = true;
-     phase1Btn.style.opacity = "0.5";
-     phase1Btn.style.cursor = "not-allowed";
+                // Phase 1
+                updateStockUI(data.phase1, phase1Btn, 'stock-p1', "PHASE 1", "SOLD OUT");
 
-        } else {
-
-            const left = phase1.total - phase1.sold;
-            phase1Btn.innerText = "BUY NOW (" + left + " LEFT)";
-
-        }
+                // Phase 2
+                // Phase 2 button is statically disabled based on HTML, but we can hook up the stock indicator
                 const phase2Btn = document.getElementById("phase2-btn");
+                const p2Container = document.getElementById('stock-p2');
+                const p2Label = p2Container.querySelector('.stock-label');
 
-        phase2Btn.innerText = "[ OUT TOMORROW ]";
-        phase2Btn.disabled = true;
+                if (data.phase2 && data.phase2.sold_out) {
+                    p2Container.setAttribute("data-stock", "out");
+                    p2Label.innerText = "SOLD OUT";
+                    phase2Btn.innerText = "PHASE 2 SOLD OUT";
+                    phase2Btn.disabled = true;
+                } else if (data.phase2) {
+                    const left = data.phase2.total - data.phase2.sold;
+                    const ratio = left / data.phase2.total;
+
+                    if (ratio > 0.4) {
+                        p2Container.setAttribute("data-stock", "high");
+                        p2Label.innerText = "IN STOCK";
+                    } else {
+                        p2Container.setAttribute("data-stock", "low");
+                        p2Label.innerText = "FEW LEFT";
+                    }
+
+                    // Retain the OUT TOMORROW text on Phase 2 as requested originally, or change if needed.
+                    phase2Btn.innerText = "[ OUT TOMORROW ]";
+                    phase2Btn.disabled = true;
+                }
+
             } catch (err) {
 
                 console.log("Ticket API error:", err);
@@ -3448,12 +3547,12 @@ const phase1 = data.phase1;
                     // ✅ GET request — no CORS issues at all
                     document.getElementById("payment-loading").style.display = "flex";
                     const orderRes = await fetch(
-SCRIPT_URL +
-"?action=createOrder&email=" +
-encodeURIComponent(email) +
-"&phase=" +
-selectedPhase
-);
+                        SCRIPT_URL +
+                        "?action=createOrder&email=" +
+                        encodeURIComponent(email) +
+                        "&phase=" +
+                        selectedPhase
+                    );
                     const order = await orderRes.json();
                     document.getElementById("payment-loading").style.display = "none";
                     console.log("ORDER:", order);
@@ -3489,22 +3588,22 @@ selectedPhase
             };
         });
     </script>
-    
-   <div id="email-modal" class="ticket-email-modal">
 
-<div class="ticket-email-box">
+    <div id="email-modal" class="ticket-email-modal">
 
-<button id="close-email-modal" class="email-close">✕</button>
-<h3>ENTER EMAIL</h3>
-<p>Your ticket will be sent here</p>
+        <div class="ticket-email-box">
 
-<input id="ticket-email" type="email" placeholder="email@example.com">
+            <button id="close-email-modal" class="email-close">✕</button>
+            <h3>ENTER EMAIL</h3>
+            <p>Your ticket will be sent here</p>
 
-<button id="continue-payment">CONTINUE</button>
+            <input id="ticket-email" type="email" placeholder="email@example.com">
 
-</div>
+            <button id="continue-payment">CONTINUE</button>
 
-</div>
+        </div>
+
+    </div>
     <div id="payment-loading" class="payment-loading">
         <div class="loader-box">
             <div class="spinner"></div>
@@ -3512,34 +3611,19 @@ selectedPhase
         </div>
     </div>
     <script>
-        document.getElementById("close-email-modal").onclick = function(){
+        document.getElementById("close-email-modal").onclick = function () {
 
-document.getElementById("email-modal").style.display = "none";
+            document.getElementById("email-modal").style.display = "none";
 
-};
-    document.getElementById("email-modal").addEventListener("click", function(e){
+        };
+        document.getElementById("email-modal").addEventListener("click", function (e) {
 
-if(e.target === this){
-this.style.display="none";
-}
+            if (e.target === this) {
+                this.style.display = "none";
+            }
 
-});
+        });
     </script>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
