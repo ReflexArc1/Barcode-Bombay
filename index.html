@@ -2842,8 +2842,14 @@ BUY NOW
                         <li>General floor access</li>
                         <li>Limited availability</li>
                     </ul>
-                    <button class="buy-btn buy-btn-filled" disabled
-                        style="opacity: 0.5; cursor: not-allowed; border-color: transparent;">[ UNAVAILABLE ]</button>
+                    <button
+id="phase2-btn"
+class="buy-btn buy-btn-filled"
+disabled
+data-phase="phase2"
+data-desc="Phase 2 — Barcode Bombay">
+[ OUT TOMORROW ]
+</button>
                 </div>
                 <div class="ticket-card fade-in" style="transition-delay:0.24s;">
                     <div class="ticket-stub left"></div>
@@ -3369,7 +3375,7 @@ const phase1 = data.phase1;
 
         if (phase1.sold_out) {
 
-            phase1Btn.innerText = "PHASE 0 SOLD OUT";
+            phase1Btn.innerText = "PHASE 1 SOLD OUT";
      phase1Btn.disabled = true;
      phase1Btn.style.opacity = "0.5";
      phase1Btn.style.cursor = "not-allowed";
@@ -3380,6 +3386,10 @@ const phase1 = data.phase1;
             phase1Btn.innerText = "BUY NOW (" + left + " LEFT)";
 
         }
+                const phase2Btn = document.getElementById("phase2-btn");
+
+        phase2Btn.innerText = "[ OUT TOMORROW ]";
+        phase2Btn.disabled = true;
             } catch (err) {
 
                 console.log("Ticket API error:", err);
@@ -3517,6 +3527,7 @@ this.style.display="none";
 </body>
 
 </html>
+
 
 
 
